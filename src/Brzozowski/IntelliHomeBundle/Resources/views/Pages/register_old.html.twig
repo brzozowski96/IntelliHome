@@ -1,0 +1,42 @@
+{% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+    {% block pageTitle %}
+        Rejestracja | {{ parent() }}
+    {% endblock %}
+
+    {% block navigation %}{% endblock %}
+
+    {% block alertContainer %}{% endblock %}
+
+    {% block pageContainer %}
+        <div class="container">
+            <div class="col-md-3"></div>
+            <div class="panel panel-default col-md-6">
+                <div class="panel-body">
+                    <h1 style="text-align: center">Rejestracja</h1>
+                    {#
+                    {% block alertContainer %}
+                        {{ parent() }}
+                    {% endblock %}
+                    #}
+        {#
+                    {% if formData is not null %}
+                        <pre>{{ dump(formData) }}</pre>
+                    {% endif %}
+        #}
+                    {#{{ form(form) }}#}
+                    {% if form is not null %}
+                        {{ form(form, {'attr': {'novalidate': 'true'}}) }}
+                    {% else %}
+                        <div class="panel panel-success">
+                            <div class="panel-heading">Już się zarejestrowałeś na szkolenie</div>
+                            <div class="panel-body">Twoje zgłoszenie rejestracyjne jest przetwarzane</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block footer %}{% endblock %}

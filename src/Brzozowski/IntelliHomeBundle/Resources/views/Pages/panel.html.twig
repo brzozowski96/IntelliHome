@@ -1,0 +1,412 @@
+{% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
+
+{% block pageTitle %}
+    Panel | {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function(){
+
+            $("#btnAlarmStatus :input").change(function() {
+                //console.log(this.value); // ON, CHANGE or OFF
+                var btnStatus = this.value;
+                $.ajax({
+                    url: '{{ path('intellihome_alarm_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'alarmStatus': btnStatus},
+                    success: function (d) {
+                        //console.log(d);
+                        if(btnStatus == 'OFF') {
+                            $('#activeLabel').removeClass("btn-danger").addClass("btn-default");
+                            $('#startingLabel').removeClass("btn-warning").addClass("btn-default");
+                            $('#inactiveLabel').removeClass("btn-default").addClass("btn-success");
+                        }
+                        else if(btnStatus == 'ON' || btnStatus == 'CHANGE') {
+                            $('#inactiveLabel').removeClass("btn-success").addClass("btn-default");
+                            $('#startingLabel').removeClass("btn-default").addClass("btn-warning active");
+                            $('#activeLabel').removeClass("active btn-danger").addClass("btn-default");
+                        }
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+            $('#dezactivate').click(function(){
+                $.ajax({
+                    url: '{{ path('intellihome_alarm_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'alarmStatus': 'OFF'},
+                    success:function(d){
+                        //console.log(d);
+                    },
+                    error : function(){
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        //checkSession();
+                    }
+                });
+            });
+
+
+            $('#changeWateringStatusOff').click(function(){
+                if(! $('#changeWateringStatusOff').hasClass('active'))
+                $.ajax({
+                    url: '{{ path('intellihome_panel_watering_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'status': 'off'},
+                    success:function(d){
+                        //console.log(d);
+                        $('#changeWateringStatusOn').removeClass( "btn-success active" ).addClass( "btn-default" );
+                        $('#changeWateringStatusOff').removeClass( "btn-default" ).addClass( "btn-danger active" );
+                        checkSession();
+                    },
+                    error : function(){
+                        showAjaxError();
+                    }
+                });
+            });
+            $('#changeWateringStatusOn').click(function(){
+                if(! $('#changeWateringStatusOn').hasClass('active'))
+                $.ajax({
+                    url: '{{ path('intellihome_panel_watering_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'status': 'on'},
+                    success:function(d){
+                        //console.log(d);
+                        $('#changeWateringStatusOff').removeClass( "btn-danger active" ).addClass( "btn-default" );
+                        $('#changeWateringStatusOn').removeClass( "btn-default" ).addClass( "btn-success active" );
+                        checkSession();
+                    },
+                    error : function(){
+                        showAjaxError();
+                    }
+                });
+            })
+
+            $('#changeHeatingLevel').mousemove(function() {
+                var currentValue = parseFloat($('#changeHeatingLevel').val());
+                $('#rangeTempValue').text(currentValue);
+            });
+
+            $('#changeHeatingLevel').mousemove(function() {
+                var currentValue = $('#changeHeatingLevel').val();
+                $('#rangeTempValue').text(currentValue);
+            });
+
+            $("#setRegulatorSettings").click(function() {
+                var temperature = parseFloat($('#changeHeatingLevel').val());
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_regulator') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'temperature': temperature, 'amplitude': null},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $('#upBlindsLevel').click(function() {
+                var currentValue = parseInt($('#progressBlindsValue').text());
+                if(currentValue < 100) currentValue = currentValue+20;
+                $('#progressBlindsValue').text(currentValue);
+
+                $('#progressBarBlindLevel').css('width', currentValue+'%');
+                sendAjaxWithBlindsValue();
+            });
+
+            $('#downBlindsLevel').click(function() {
+                var currentValue = parseInt($('#progressBlindsValue').text());
+                if(currentValue > 0) currentValue = currentValue-20;
+                $('#progressBlindsValue').text(currentValue);
+
+                $('#progressBarBlindLevel').css('width', currentValue+'%');
+                sendAjaxWithBlindsValue();
+            });
+
+            function sendAjaxWithBlindsValue() {
+                var blindsLevel = parseInt($('#progressBlindsValue').text());
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blinds') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'blindsLevel': blindsLevel },
+                    success: function () {
+                    },
+                    error : function(){
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        //checkSession();
+                    }
+                });
+            }
+
+        });
+
+    </script>
+{% endblock %}
+
+
+{% block pageContainer %}
+    <div class="container">
+        <div class="row" style="margin-top: 0">
+            <div class="col-md-4 col-sm-6 front">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Pogoda
+                        <span class="weather-data">{{ weather.date|date('d.m.Y') }} {{ weather.time|date('H:i') }}</span>
+                    </div>
+                    <div class="panel-body panel-first-row">
+                        <p class="weather-text" style="margin:0"><span class="glyphicon glyphicon-text-size" aria-hidden="true"></span>
+                            Temperatura
+                            <span class="weather-data"><b>{{ weather.temperature|number_format(1, '.', ' ')|temp }}</b></span></p>
+                        <p class="weather-text" style="font-size:14px;min-height:20px">
+                            <span class="weather-data">(Odczuwalna {{ weather.feelsLike }}<sup>o</sup>C)</span></p>
+                        <p class="weather-text"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Wilgotność
+                            <span class="weather-data"><b>{{ weather.humidity }}%</b></span></p>
+
+                        <p class="weather-text"><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Nasłonecznienie
+                            <span class="weather-data"><b>{{ weather.solarradiation }} W/m<sup>2</sup></b></span></p>
+                        <p class="weather-text"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span> Opady
+                            <span class="weather-data"><b>{{ weather.rainLevel }} mm</b></span></p>
+
+                        <p class="weather-text"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Wiatr
+                            <span class="weather-data"><b>{{ weather.windLevel|number_format(1, '.', ' ') }} km/h</b></span></p>
+                        <p class="weather-text"><span class="glyphicon glyphicon-scale" aria-hidden="true"></span> Ciśnienie
+                            <span class="weather-data"><b>{{ weather.pressure }} hPa</b></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 front">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-bell" aria-hidden="true"></span> Bezpieczeństwo
+                        <span class="weather-data">{{ alarm.date|date('d.m.Y') }} {{ alarm.time|date('H:i') }}</span>
+                    </div>
+                    <div class="panel-body panel-first-row">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-12">
+                                <p>Alarm</p>
+                            </div>
+                            <div class="col-md-10 col-sm-12">
+                                {% if alarm.status == 'BREAKIN'%}
+                                    <p style="float:right;margin:0">WŁAMANIE !!!   </p>
+                                        <form>
+                                            <button  id="dezactivate" class="btn btn-xs btn-warning">Rozbrój</button>
+                                        </form>
+                                        <a href="tel:112" class="btn btn-link btn-xs">Kliknij by zadzwonić na policję!</a>
+                                {% else %}
+                                    <div id="btnAlarmStatus" style="float:right" class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-sm
+                                            {% if alarm.status == 'OFF' %}
+                                                btn-success active
+                                            {% else %}
+                                                btn-default
+                                            {% endif %}
+                                            btn-alarmStatus" id="inactiveLabel">
+                                            <input type="radio" name="alarmStatus" id="inactive" value="OFF">Nieaktywny
+                                        </label>
+                                        <label class="btn btn-sm
+                                            {% if alarm.status == 'CHANGE' %}
+                                                btn-warning active
+                                            {% else %}
+                                                btn-default
+                                            {% endif %}
+                                            btn-alarmStatus" id="startingLabel">
+                                            <input type="radio" name="alarmStatus" id="starting" value="CHANGE">Uruchamianie
+                                        </label>
+                                        <label class="btn btn-sm
+                                            {% if alarm.status == 'ON' %}
+                                                btn-danger active
+                                            {% else %}
+                                                btn-default
+                                            {% endif %}
+                                            btn-alarmStatus" id="activeLabel">
+                                            <input type="radio" name="alarmStatus" id="active" value="ON">Aktywny
+                                        </label>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <!-- Bootstrap dodaje klase active po kliknieciu przycisku -->
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <section class="centerElement">
+                                <!-- Obraz z kamerki -->
+                                {% if alarm.status == 'OFF' and showCameraView == 'false' %}
+                                    Obraz niedostępny
+                                {% else %}
+                                    <a data-toggle="modal" data-target="#myModal">
+                                        <img class="img-responsive" name="main" id="main" border="0" src="{{ asset('bundles/brzozowskiintellihome/img/home_security_camera.jpg') }}">
+                                    </a>
+                                {% endif %}
+                                </section>
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Obraz z monitoringu</h4>
+                                            </div>
+                                            <div class="modal-body" style="padding:0 auto;">
+                                            <section class="centerElement">
+                                                <img style="width: 100%;height: auto;" name="main" id="main" border="0" src="{{ asset('bundles/brzozowskiintellihome/img/home_security_camera.jpg') }}">
+                                            </section>
+                                            <!--
+                                            <iframe src="http://localhost/SmartHomeWebsite/camera_view.html"></iframe>
+                                            -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="http://intellihomesystem.pl:81/" class="btn btn-info" style="float:left" target="_blank">Ustawienia kamery</a>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                                                <button type="button" class="btn btn-primary" id="takeScreenshot">Zapisz screen'a</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><! -- row -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 front">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span> Powiadomienia
+                        <span class="badge">{{ notifications|length }}</span>(ostatnie 3 dni)
+                        <!-- Wybór czasu z jakiego mają być wyświetlane powiadomienia
+                        <form action="panel.php">
+                         <select name="nazwa">
+                           <option>Aktualny dzień</option>
+                           <option>Ostatnie 3 dni</option>
+                           <option>Ostatni tydzień</option>
+                           <option>Ostatni miesiąc</option>
+                         </select>
+                       </form>
+                       -->
+                    </div>
+                    <div class="panel-body panel-first-row2">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="notifications">
+
+                                {% for notification in notifications  %}
+                                    <blockquote class="blockquote-reverse">
+                                        <div class="alert alert-{{ notification.type }}" role="alert">
+                                            <button type="button" class="close" aria-label="Close"></button>
+                                            <p>{{ notification.content }}</p>
+                                            <footer>{{ notification.date|date('d.m.Y') }} {{ notification.time|date('H:i') }}</footer>
+                                        </div>
+                                    </blockquote>
+                                {% else %}
+                                    <section class="centerElement">
+                                        Brak powiadomień
+                                    </section>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Szybkie sterowanie
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">  <!-- Pierwsza z 3 czesci -->
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <p>Rolety (<b><span id="progressBlindsValue">{{ blindLevel }}</span>%</b>)</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-8 col-xs-8">
+                                        <div class="progress">
+                                            <div id="progressBarBlindLevel" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ blindLevel }}%;">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="blind">
+                                            <button id="upBlindsLevel" type="button" class="btn btn-default">
+                                                <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+                                            <button id="downBlindsLevel" type="button" class="btn btn-default">
+                                                <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">  <!-- Druga z 3 czesci -->
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 quick-control">
+                                        <p>Ogrzewanie (<b><span id="rangeTempValue">{{ heatingLevel }}</span><sup>o</sup>C</b>)</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-8 col-xs-8">
+                                        <input id="changeHeatingLevel" type="range" name="points" min="5.0" max="30.0" step="0.5" value="{{ heatingLevel }}">
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4 quick-control">
+                                        <button id="setRegulatorSettings" type="button" class="btn btn-default btn-sm">USTAW</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">  <!-- Trzecia z 3 czesci -->
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <p>Podlewanie</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="watering">
+                                            {% if wateringState == 'true' %}
+                                                <button id="changeWateringStatusOn" type="button" class="active btn btn-success" value="on" >ON</button>
+                                                <button id="changeWateringStatusOff" type="button" class="btn btn-default" value="off" >OFF</button>
+                                            {% else %}
+                                                <button id="changeWateringStatusOn" type="button" class="btn btn-default" value="on" >ON</button>
+                                                <button id="changeWateringStatusOff" type="button" class="active btn btn-danger" value="off" >OFF</button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-sm-7 col-xs-7">
+                                        <span style="font-size:13px;">Podlewanie uruchamia się gdy wilgotność gleby spada.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+<?php
+
+namespace Brzozowski\IntelliHomeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Persons
+ *
+ * @ORM\Table(name="persons")
+ * @ORM\Entity
+ */
+class Persons
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="CardNumber", type="integer", nullable=false)
+     */
+    private $cardnumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Name", type="string", length=50, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Surname", type="string", length=50, nullable=false)
+     */
+    private $surname;
+
+
+}
+

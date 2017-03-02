@@ -1,0 +1,21 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profil użytkownika
+        </div>
+        <div class="panel-body" style="min-height: 399px">
+
+            <div class="fos_user_user_show">
+                <p>{{ 'profile.show.username'|trans }}: <b>{{ user.username }}</b></p>
+                <p>Imię <b>{{ user.name }}</b></p>
+                <p>Nazwisko <b>{{ user.surname }}</b></p>
+                <p>{{ 'profile.show.email'|trans }}: <b>{{ user.email }}</b></p>
+            </div>
+            <br>
+            <a href="{{ path('intellihome_settings') }}"><button class="btn btn-default">Powrót</button></a>
+
+        </div>
+    </div>
+</div>
