@@ -233,14 +233,6 @@ class UpdateAutomationPageController extends Controller
 
             $isDone = $query->execute();
 
-            $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił położenie rolet używając serwisu IntelliHome";
-
-            $log = new Logs();
-            $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($log);
-            $em->flush();
-
             $response = array(
                 "code" => 200,
                 "success" => true,
