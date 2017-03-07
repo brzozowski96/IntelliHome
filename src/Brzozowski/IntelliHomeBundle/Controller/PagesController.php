@@ -2,14 +2,9 @@
 
 namespace Brzozowski\IntelliHomeBundle\Controller;
 
-use Brzozowski\IntelliHomeBundle\Entity\WeatherStation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Brzozowski\IntelliHomeBundle\Form\RegisterType;
-use Brzozowski\IntelliHomeBundle\Form\LoginType;
-use Brzozowski\IntelliHomeBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

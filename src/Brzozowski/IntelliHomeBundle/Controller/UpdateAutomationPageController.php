@@ -9,17 +9,13 @@ use Brzozowski\IntelliHomeBundle\Entity\TemporaryData;
 use Brzozowski\IntelliHomeBundle\Entity\WeatherStation;
 use Doctrine\ORM\Mapping\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-use Brzozowski\IntelliHomeBundle\Form\RegisterType;
-use Brzozowski\IntelliHomeBundle\Form\LoginType;
 use Brzozowski\IntelliHomeBundle\Entity\Logs;
 use Brzozowski\IntelliHomeBundle\Entity\Alarm;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route(

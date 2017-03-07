@@ -97,13 +97,8 @@
             })
 
             $('#changeHeatingLevel').mousemove(function() {
-                var currentValue = parseFloat($('#changeHeatingLevel').val());
-                $('#rangeTempValue').text(currentValue);
-            });
-
-            $('#changeHeatingLevel').mousemove(function() {
-                var currentValue = $('#changeHeatingLevel').val();
-                $('#rangeTempValue').text(currentValue);
+                var currentValue = parseFloat($(this).val());
+                $('#rangeTempValue').text(currentValue.toFixed(1));
             });
 
             $("#setRegulatorSettings").click(function() {
