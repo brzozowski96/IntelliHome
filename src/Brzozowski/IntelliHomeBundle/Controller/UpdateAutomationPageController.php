@@ -240,4 +240,72 @@ class UpdateAutomationPageController extends Controller
 
         return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
     }
+
+
+    /**
+     * @Route(
+     *     "/ustaw-harmonogram",
+     *     name="intellihome_automation_timetable_update"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function updateHeatingTimetableAction(Request $request)
+    {
+        $isAjax = $request->isXmlHttpRequest();
+
+        if($isAjax)
+        {
+            $dateTime = new \DateTime();
+            $em = $this->getDoctrine()->getManager();
+            $Session = $this->get('session');
+
+            $timetable = $request->request->get('timetable');
+
+            for($i=1; $i<=7; $i++)
+            //foreach ($timetable as $blocksContent)
+            {
+                $blocksContent = $timetable[$i];
+                $parameters = array(
+                    'dayOfWeek' => $i,
+                );
+                foreach ($blocksContent as $key => $value)
+                {
+                    //$parameters[$key] = $value;
+                    //array_push($parameters, $key => $value);
+                    $parameters = $parameters + array($key => $value);
+                }
+
+                $sql = 'UPDATE BrzozowskiIntelliHomeBundle:HeatingTimetable t
+                    SET t.startBlock1 = :StartBlock1, t.startBlock2 = :StartBlock2, t.startBlock3 = :StartBlock3,
+                    t.stopBlock1 = :StopBlock1, t.stopBlock2 = :StopBlock2, t.stopBlock3 = :StopBlock3,
+                    t.modeBlock1 = :ModeBlock1, t.modeBlock2 = :ModeBlock2, t.modeBlock3 = :ModeBlock3
+                    WHERE t.dayOfWeek = :dayOfWeek';
+
+                $query = $em->createQuery($sql)
+                    ->setParameters($parameters);
+
+                $isDone = $query->execute();
+            }
+
+            $Session->getFlashBag()->add('success', 'Harmonogram ogrzewania został zmieniony');
+            $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił harmonogram ogrzewania";
+
+            $log = new Logs();
+            $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($log);
+            $em->flush();
+
+            $response = array(
+                "code" => 200,
+                "success" => true,
+                'dateTime' => $dateTime,
+            );
+
+            return new Response(json_encode($response));
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
 }

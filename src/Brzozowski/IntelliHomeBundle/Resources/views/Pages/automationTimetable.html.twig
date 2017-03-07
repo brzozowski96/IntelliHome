@@ -4,30 +4,52 @@
     Harmonogram | {{ parent() }}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("#saveHeatingTimetableSettings").click(function(e) {
+            e.preventDefault();
+            var data = [];
+            var entity;
+            for(var dayOfWeek=1; dayOfWeek<=7; dayOfWeek++) {
+                entity = {
+                    StartBlock1: $('#day' + dayOfWeek + 'StartBlock1').val(),
+                    StopBlock1: $('#day' + dayOfWeek + 'StopBlock1').val(),
+                    ModeBlock1: $('#day' + dayOfWeek + 'ModeBlock1').val(),
+                    StartBlock2: $('#day' + dayOfWeek + 'StartBlock2').val(),
+                    StopBlock2: $('#day' + dayOfWeek + 'StopBlock2').val(),
+                    ModeBlock2: $('#day' + dayOfWeek + 'ModeBlock2').val(),
+                    StartBlock3: $('#day' + dayOfWeek + 'StartBlock3').val(),
+                    StopBlock3: $('#day' + dayOfWeek + 'StopBlock3').val(),
+                    ModeBlock3: $('#day' + dayOfWeek + 'ModeBlock3').val()
+                };
+                data[dayOfWeek] = entity;
+            }
+            //console.log(data);
+
+            $.ajax({
+                url: '{{ path('intellihome_automation_timetable_update') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: {'timetable': data },
+                success: function (d) {
+
+                },
+                error : function(d){
+                    //console.log(d);
+                    showAjaxError();
+                },
+                complete: function(){
+                    checkSession();
+                }
+            });
+        });
+    </script>
+{%  endblock %}
+
 {% block pageContainer %}
 <div class="container">
-    <div class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <b>tresc..................</b>
-    </div>
-
-    <div class="alert alert-info" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <b>Harmonogram został zaktualizowany</b>
-    </div>
-    <div class="alert alert-info" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <b>Tryby grzewcze zostały zmienione</b>
-    </div>
-    <div class="alert alert-success" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <b>Harmonogram ogrzewania został zmieniony</b>
-    </div>
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Ogrzewanie
@@ -55,7 +77,7 @@
                                     <td rowspan="3">{{ getDayName(row.dayOfWeek) }}</td>
                                 {% endif %}
                                     <td>
-                                        <select name="{{ row.dayOfWeek }}StartBlock{{ i }}" class="time-table-field">
+                                        <select name="day{{ row.dayOfWeek }}StartBlock{{ i }}" id="day{{ row.dayOfWeek }}StartBlock{{ i }}" class="time-table-field">
                                             {% if i == 1 %}
                                                 <option value="{{ row.getStartBlock1|date('H:i') }}" selected>0:00</option>
                                             {% else %}
@@ -88,10 +110,10 @@
                                             {% endif %}
                                         </select>
                                         -
-                                        <select name="{{ row.dayOfWeek }}StopBlock{{ i }}" class="time-table-field">
+                                        <select name="day{{ row.dayOfWeek }}StopBlock{{ i }}" id="day{{ row.dayOfWeek }}StopBlock{{ i }}" class="time-table-field">
                                             {% if i == 3 %}
                                                 <option value="NULL"></option>
-                                                <option value="{{ row.getStartBlock1|date('H:i') }}" selected>23:59</option>
+                                                <option value="{{ row.getStopBlock3|date('H:i') }}" selected>23:59</option>
                                             {% else %}
                                                 {% set stopBlock = row.getStopBlock(i)|date('H:i') %}
                                                 <option value="NULL" {% if stopBlock == NULL %} selected {% endif %}></option>
@@ -123,7 +145,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="{{ row.dayOfWeek }}ModeBlock{{ i }}" class="mode-table-field">
+                                        <select name="day{{ row.dayOfWeek }}ModeBlock{{ i }}" id="day{{ row.dayOfWeek }}ModeBlock{{ i }}" class="mode-table-field">
                                             <option value="1" {% if row.getModeBlock(i) == 1 %} selected {% endif %} >Dzienny</option>
                                             <option value="2" {% if row.getModeBlock(i) == 2 %} selected {% endif %} >Nocny</option>
                                             <option value="3" {% if row.getModeBlock(i) == 3 %} selected {% endif %} >Wakacyjny</option>
@@ -143,7 +165,7 @@
                         </table>
 
                         <a href="{{ path('intellihome_automation') }}"><button class="btn btn-default">Powrót</button></a>
-                        <button type="submit" name="saveHeatingTimetableSettings" class="btn btn-info">Zapisz</button>
+                        <button type="submit" id="saveHeatingTimetableSettings" class="btn btn-info">Zapisz</button>
                     </form>
                 </div>
                 <div class="col-md-4 col-sm-4 col-xs-12" style="border-left:solid 1px #ccc">
