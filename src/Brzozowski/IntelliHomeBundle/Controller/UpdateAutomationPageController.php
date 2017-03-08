@@ -300,7 +300,74 @@ class UpdateAutomationPageController extends Controller
             $response = array(
                 "code" => 200,
                 "success" => true,
-                'dateTime' => $dateTime,
+            );
+
+            return new Response(json_encode($response));
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/ustaw-tryby-ogrzewania",
+     *     name="intellihome_automation_heatingmode_update"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function updateHeatingModesAction(Request $request)
+    {
+        $isAjax = $request->isXmlHttpRequest();
+
+        if($isAjax)
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Session = $this->get('session');
+            $dateTime = new \DateTime();
+            $dayMode = $request->request->get('dayMode');
+            $nightMode = $request->request->get('nightMode');
+            $holidayMode = $request->request->get('holidayMode');
+
+            if(     (!is_numeric($dayMode) or $dayMode < 5.0 or $dayMode > 30.0)
+                or (!is_numeric($nightMode) or $nightMode < 5.0 or $nightMode > 30.0)
+                or (!is_numeric($holidayMode) or $holidayMode < 5.0 or $holidayMode > 30.0))
+            {
+                return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+            }
+
+            $parameters = array(
+                'dayMode' => $dayMode,
+                'nightMode' => $nightMode,
+                'holidayMode' => $holidayMode,
+            );
+
+            $sql = 'UPDATE BrzozowskiIntelliHomeBundle:HeatingModes m
+                       SET m.temperature = CASE m.id
+                                          WHEN 1 THEN :dayMode
+                                          WHEN 2 THEN :nightMode
+                                          WHEN 3 THEN :holidayMode
+                                          ELSE m.temperature
+                                          END
+                     WHERE m.id IN(1, 2, 3)';
+
+            $query = $em->createQuery($sql)
+                ->setParameters($parameters);
+
+            $isDone = $query->execute();
+
+            $Session->getFlashBag()->add('success', 'Tryby ogrzewania zostały zmienione');
+            $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił tryby ogrzewania";
+
+            $log = new Logs();
+            $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($log);
+            $em->flush();
+
+            $response = array(
+                "code" => 200,
+                "success" => true,
             );
 
             return new Response(json_encode($response));

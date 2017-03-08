@@ -8,41 +8,66 @@
     {{ parent() }}
 
     <script>
-        $("#saveHeatingTimetableSettings").click(function(e) {
-            e.preventDefault();
-            var data = [];
-            var entity;
-            for(var dayOfWeek=1; dayOfWeek<=7; dayOfWeek++) {
-                entity = {
-                    StartBlock1: $('#day' + dayOfWeek + 'StartBlock1').val(),
-                    StopBlock1: $('#day' + dayOfWeek + 'StopBlock1').val(),
-                    ModeBlock1: $('#day' + dayOfWeek + 'ModeBlock1').val(),
-                    StartBlock2: $('#day' + dayOfWeek + 'StartBlock2').val(),
-                    StopBlock2: $('#day' + dayOfWeek + 'StopBlock2').val(),
-                    ModeBlock2: $('#day' + dayOfWeek + 'ModeBlock2').val(),
-                    StartBlock3: $('#day' + dayOfWeek + 'StartBlock3').val(),
-                    StopBlock3: $('#day' + dayOfWeek + 'StopBlock3').val(),
-                    ModeBlock3: $('#day' + dayOfWeek + 'ModeBlock3').val()
-                };
-                data[dayOfWeek] = entity;
-            }
-            //console.log(data);
-
-            $.ajax({
-                url: '{{ path('intellihome_automation_timetable_update') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {'timetable': data },
-                success: function (d) {
-
-                },
-                error : function(d){
-                    //console.log(d);
-                    showAjaxError();
-                },
-                complete: function(){
-                    checkSession();
+        $(document).ready(function(){
+            $("#saveHeatingTimetableSettings").click(function(e) {
+                e.preventDefault();
+                var data = [];
+                var entity;
+                for(var dayOfWeek=1; dayOfWeek<=7; dayOfWeek++) {
+                    entity = {
+                        StartBlock1: $('#day' + dayOfWeek + 'StartBlock1').val(),
+                        StopBlock1: $('#day' + dayOfWeek + 'StopBlock1').val(),
+                        ModeBlock1: $('#day' + dayOfWeek + 'ModeBlock1').val(),
+                        StartBlock2: $('#day' + dayOfWeek + 'StartBlock2').val(),
+                        StopBlock2: $('#day' + dayOfWeek + 'StopBlock2').val(),
+                        ModeBlock2: $('#day' + dayOfWeek + 'ModeBlock2').val(),
+                        StartBlock3: $('#day' + dayOfWeek + 'StartBlock3').val(),
+                        StopBlock3: $('#day' + dayOfWeek + 'StopBlock3').val(),
+                        ModeBlock3: $('#day' + dayOfWeek + 'ModeBlock3').val()
+                    };
+                    data[dayOfWeek] = entity;
                 }
+                //console.log(data);
+
+                $.ajax({
+                    url: '{{ path('intellihome_automation_timetable_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'timetable': data },
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $('#saveHeatingModeSettings').click(function(e){
+                e.preventDefault();
+                var dayMode = $('#dayMode').val();
+                var nightMode = $('#nightMode').val();
+                var holidayMode = $('#holidayMode').val();
+
+                $.ajax({
+                    url: '{{ path('intellihome_automation_heatingmode_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'dayMode': dayMode, 'nightMode': nightMode, 'holidayMode': holidayMode},
+                    success:function(d){
+                        //console.log(d);
+                    },
+                    error : function(){
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
             });
         });
     </script>
@@ -192,7 +217,7 @@
                                 <div class="input-group-addon"> <sup>o</sup>C </div>
                             </div>
                         </div>
-                        <button name="saveHeatingModeSettings" type="submit" class="btn btn-info">Zapisz</button>
+                        <button id="saveHeatingModeSettings" type="submit" class="btn btn-info">Zapisz</button>
                     </form>
                 </div>
             </div>
