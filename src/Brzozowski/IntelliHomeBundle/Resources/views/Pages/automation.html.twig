@@ -223,51 +223,6 @@
                                 </div>
                         </div>
 
-                        {#<section class="col-md-6 col-sm-12 col-xs-12">#}
-                            {#<img class="img-circle img-responsive" src="{{ asset('bundles/brzozowskiintellihome/img/heater.png') }}" alt="heater">#}
-                        {#</section>#}
-
-
-
-                        {#<form action="{{ path('intellihome_automation') }}" method="post">#}
-                            {#<table class="table">#}
-                                {#<thead>#}
-                                {#<tr>#}
-                                    {#<th colspan="2">Stan aktualny</th>#}
-                                    {#<th colspan="2">Ustawienia</th>#}
-                                {#</tr>#}
-                                {#</thead>#}
-                                {#<tbody>#}
-                                {#<tr>#}
-                                    {#<th>Data pomiaru</th>#}
-                                    {#<th>{{ temporary.date|date('d.m.Y') }}</th>#}
-                                    {#<th>Data zmiany</th>#}
-                                    {#<th>{{ heating.date|date('d.m.Y') }}</th>#}
-                                {#</tr>#}
-                                {#<tr>#}
-                                    {#<th>Czas pomiaru</th>#}
-                                    {#<th>{{ temporary.time|date('H:i') }}</th>#}
-                                    {#<th>Czas zmiany</th>#}
-                                    {#<th>{{ heating.time|date('H:i') }}</th>#}
-                                {#</tr>#}
-                                {#<tr>#}
-                                    {#<th>Temperatura</th>#}
-                                    {#<th>{{ temporary.HomeTemperature }}<sup>o</sup>C</th>#}
-                                    {#<th>Temperatura</th>#}
-                                    {#<th><input type="text" style="border:none;text-align:right;width:50px" id="temperature" value="{{ heating.temperature }}"><sup>o</sup>C#}
-                                        {#<input type="button" class="btn-ChangeTemperature" style="float:right" name="ChangeTemperature" value="Ustaw"></th>#}
-                                {#</tr>#}
-                                {#<tr>#}
-                                    {#<th>Wilgotność</th>#}
-                                    {#<th>{{ temporary.HomeHumidity }}%</th>#}
-                                    {#<th>Amplituda</th>#}
-                                    {#<th><input type="text" style="border:none;text-align:right;width:50px" id="amplitude" value="{{ heating.amplitude }}"><sup>o</sup>C#}
-                                        {#<input type="button" class="btn-ChangeAmplitude" style="float:right" name="ChangeAmplitude" value="Ustaw"></th>#}
-                                {#</tr>#}
-                                {#</tbody>#}
-                            {#</table>#}
-                        {#</form>#}
-
                         <a href="{{ path('intellihome_automation_timetable') }}">
                             <button class="btn btn-default">
                                 <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Ustaw harmonogram
@@ -280,7 +235,7 @@
                     </div>
 
 
-                    <div class="col-md-4 col-sm-12 col-xs-12" style="text-align:justify;border-left:solid 1px #ccc">
+                    <div class="col-md-4 hidden-sm hidden-xs" style="text-align:justify;border-left:solid 1px #ccc">
                         <h4>Informacje</h4>
                         <p><b>Praca stała</b> - Kocioł grzewczy utrzymuje w pomieszczeniach użytkowych stałą, zadaną temperaturę.
                             W tym trybie harmonogram zostaje zawieszony.</p>

@@ -69,6 +69,125 @@
                     }
                 });
             });
+
+            $("[id$='StopBlock1']").change(function(e){
+            //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "23:59"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StartBlock2").val("NULL");
+                    $("#"+dayToNullable+"StopBlock2").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock2").val("NULL");
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+
+            });
+            $("[id$='StartBlock2']").change(function(e){
+                //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "NULL"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StopBlock1").val("23:59");
+                    $("#"+dayToNullable+"StopBlock2").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock2").val("NULL");
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StopBlock1";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) - Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":59");
+//                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == "NULL")
+//                    $(selectToRefresh).val("23:59");
+                else $(selectToRefresh).val(timeToUpdate+":59");
+
+            });
+            {#
+            $("[id$='StartBlock2']").change(function(e){
+                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+                if(valueOfChangedSelect = "NULL"){
+                    $('#day1Block2row').hide();
+                    $('#day1Block3row').hide();
+                }
+                console.log(valueOfChangedSelect);
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+
+            });
+            #}
+            $("[id$='StopBlock2']").change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "23:59"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock3";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+                $("#"+dayToRefresh+"StopBlock3").val("23:59");
+
+            });
+            $("[id$='StartBlock3']").change(function(e){
+                //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "NULL"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StopBlock2").val("23:59");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StopBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) - Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":59");
+                else $(selectToRefresh).val(timeToUpdate+":59");
+                $("#"+dayToRefresh+"StopBlock3").val("23:59");
+
+            });
         });
     </script>
 {%  endblock %}
@@ -96,8 +215,9 @@
                             <tbody>
 
                             {% for row in timetable %}
-                                <tr>
                                 {% for i in 1..3 %}
+                                <tr id="day{{ row.dayOfWeek }}Block{{ i }}row">
+                                {#{% for i in 1..3 %}#}
                                 {% if i == 1 %}
                                     <td rowspan="3">{{ getDayName(row.dayOfWeek) }}</td>
                                 {% endif %}
@@ -108,7 +228,7 @@
                                             {% else %}
                                                 {% set startBlock = row.getStartBlock(i)|date('H:i') %}
                                                 <option value="NULL" {% if startBlock == NULL %} selected {% endif %}></option>
-                                                <option value="00:00" {% if startBlock == '00:00' %} selected {% endif %}>0:00</option>
+                                                {#<option value="00:00" {% if startBlock == '00:00' %} selected {% endif %}>0:00</option>#}
                                                 <option value="01:00" {% if startBlock == '01:00' %} selected {% endif %}>1:00</option>
                                                 <option value="02:00" {% if startBlock == '02:00' %} selected {% endif %}>2:00</option>
                                                 <option value="03:00" {% if startBlock == '03:00' %} selected {% endif %}>3:00</option>
@@ -141,7 +261,9 @@
                                                 <option value="{{ row.getStopBlock3|date('H:i') }}" selected>23:59</option>
                                             {% else %}
                                                 {% set stopBlock = row.getStopBlock(i)|date('H:i') %}
-                                                <option value="NULL" {% if stopBlock == NULL %} selected {% endif %}></option>
+                                                {% if i == 2 %}
+                                                    <option value="NULL" {% if stopBlock == NULL %} selected {% endif %}></option>
+                                                {% endif %}
                                                 <option value="00:59" {% if stopBlock == '00:59' %} selected {% endif %}>0:59</option>
                                                 <option value="01:59" {% if stopBlock == '01:59' %} selected {% endif %}>1:59</option>
                                                 <option value="02:59" {% if stopBlock == '02:59' %} selected {% endif %}>2:59</option>
@@ -171,6 +293,7 @@
                                     </td>
                                     <td>
                                         <select name="day{{ row.dayOfWeek }}ModeBlock{{ i }}" id="day{{ row.dayOfWeek }}ModeBlock{{ i }}" class="mode-table-field">
+                                            <option value="NULL"></option>
                                             <option value="1" {% if row.getModeBlock(i) == 1 %} selected {% endif %} >Dzienny</option>
                                             <option value="2" {% if row.getModeBlock(i) == 2 %} selected {% endif %} >Nocny</option>
                                             <option value="3" {% if row.getModeBlock(i) == 3 %} selected {% endif %} >Wakacyjny</option>
