@@ -63,6 +63,19 @@ class Notifications
      */
     private $readByUser;
 
+
+
+    function __construct($type, $message)
+    {
+        $datetime = new \DateTime();
+        $this->date = $datetime;
+        $this->time = $datetime;
+        $this->type = $type;
+        $this->content = $message;
+        $this->isRead = 0;
+        $this->readByUser = 0;
+    }
+
     /**
      * @return int
      */
