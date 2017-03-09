@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Brzozowski\IntelliHomeBundle\Entity\Logs;
 use Brzozowski\IntelliHomeBundle\Entity\Alarm;
 use Symfony\Component\HttpFoundation\Request;
+use Brzozowski\IntelliHomeBundle\Model\Arduino\ArduinoDataProvider as Arduino;
 
 /**
  * @Route(
@@ -64,6 +65,8 @@ class UpdateAutomationPageController extends Controller
 
             $isDone = $query->execute();
 
+            Arduino::setHeatingMode($operatingMode);
+
             $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił tryb ogrzewania używając serwisu IntelliHome";
             $Session->getFlashBag()->add('success', 'Tryb ogrzewania został zmieniony');
 
@@ -102,6 +105,8 @@ class UpdateAutomationPageController extends Controller
         {
             $dateTime = new \DateTime();
             $Session = $this->get('session');
+
+            Arduino::setHeatingDatetime();
             $Session->getFlashBag()->add('success', 'Data i czas na regulatorze zostały ustawione');
 
             $response = array(
@@ -168,6 +173,9 @@ class UpdateAutomationPageController extends Controller
 
             $isDone = $query->execute();
 
+            Arduino::setHeatingAmplitude($heatingAmplitude);
+            Arduino::setHeatingTemperature($heatingTemperature);
+
             $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił ustawienia ogrzewania używając serwisu IntelliHome";
             $Session->getFlashBag()->add('success', 'Ustawienia ogrzewania zostały zmienione');
 
@@ -229,6 +237,8 @@ class UpdateAutomationPageController extends Controller
 
             $isDone = $query->execute();
 
+            Arduino::setBlindsLevel($blindsLevel);
+
             $response = array(
                 "code" => 200,
                 "success" => true,
@@ -239,6 +249,78 @@ class UpdateAutomationPageController extends Controller
         }
 
         return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/ustaw-podlewanie",
+     *     name="intellihome_panel_watering_update"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function updateWateringAction(Request $request)
+    {
+        $isAjax = $request->isXmlHttpRequest();
+
+        if($isAjax)
+        {
+            $status = $request->request->get('status');
+
+            if($status == 'on') $wateringStatus = true;
+            else $wateringStatus = false;
+
+            $em = $this->getDoctrine()->getManager();
+            $dateTime = new \DateTime();
+            $Session = $this->get('session');
+
+            $parameters = array(
+                'date' => $dateTime,
+                'time' => $dateTime,
+                'status' => $wateringStatus,
+            );
+
+            $sql = 'UPDATE BrzozowskiIntelliHomeBundle:TemporaryData t 
+                    SET t.date = :date, t.time = :time, t.wateringstate = :status 
+                    WHERE t.id = 1';
+
+            $query = $em->createQuery($sql)
+                ->setParameters($parameters);
+
+            $isDone = $query->execute();
+
+            $setting = "200";   // number of watering setting
+            Arduino::setSystemSettings($setting, $wateringStatus);
+
+            if($wateringStatus == true) {
+                $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." aktywował inteligentne podlewanie używając serwisu IntelliHome";
+                $Session->getFlashBag()->add('success', 'Inteligentne podlewanie aktywowane');
+            }
+            else {
+                $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." dezaktywował inteligentne podlewanie używając serwisu IntelliHome";
+                $Session->getFlashBag()->add('warning', 'Inteligentne podlewanie dezaktywowane');
+            }
+
+            $log = new Logs();
+            $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($log);
+            $em->flush();
+
+            $success = true;
+            $error = null;
+
+            $response = array(
+                "code" => 200,
+                "success" => $success,
+                "error" => $error,
+                'wateringStatus' => $status,
+            );
+
+            return new Response(json_encode($response));
+        }
+
+        return $this->redirect($this->generateUrl('fos_user_security_login'));
     }
 
 

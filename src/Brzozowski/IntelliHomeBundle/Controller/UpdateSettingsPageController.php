@@ -21,6 +21,7 @@ use Brzozowski\IntelliHomeBundle\Entity\Logs;
 use Brzozowski\IntelliHomeBundle\Entity\Alarm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Brzozowski\IntelliHomeBundle\Model\Arduino\ArduinoDataProvider as Arduino;
 
 
 /**
@@ -68,6 +69,11 @@ class UpdateSettingsPageController extends Controller
                 ->setParameters($parameters);
 
             $isDone = $query->execute();
+
+            Arduino::setNewPhoneNumber($alarmPhone);
+            Arduino::setSirenTime($sirenTime);
+            $setting = "100";   // number of blind setting
+            Arduino::setSystemSettings($setting, $blindTime);
 
             $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." zmienił ustawienia pamięci systemu używając serwisu IntelliHome";
             $Session->getFlashBag()->add('success', 'Ustawienia zostały zmienione');
@@ -252,7 +258,6 @@ class UpdateSettingsPageController extends Controller
 
         $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." wysłał wiadomość do administratora";
         $Session->getFlashBag()->add('success', 'Wiadomość została wysłana');
-
 
         $log = new Logs();
         $log->setDate($dateTime)->setTime($dateTime)->setContent($message);

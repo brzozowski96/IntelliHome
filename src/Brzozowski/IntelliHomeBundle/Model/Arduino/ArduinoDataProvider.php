@@ -5,72 +5,74 @@ namespace Brzozowski\IntelliHomeBundle\Model\Arduino;
 
 class ArduinoDataProvider
 {
-    private $portAddress = "/dev/ttyUSB0";          //   chmod 777 /dev/ttyUSB0
+    static private $portAddress = "/dev/ttyUSB0";          //   chmod 777 /dev/ttyUSB0
 
-    private $regulatorAddress = "http://192.168.2.126";
+    static private $regulatorAddress = "http://192.168.2.126";
+
+    static private $blindsAddress = "";
 
 
-    function activateAlarm()
+    static function activateAlarm()
     {
-        exec('echo s > '.$this->portAddress.'');
+        exec('echo s > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function dezactivateAlarm()
+    static function dezactivateAlarm()
     {
-        exec('echo r > '.$this->portAddress.'');
+        exec('echo r > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function sendBrakeIn()
+    static function sendBrakeIn()
     {
-        exec('echo b > '.$this->portAddress.'');
+        exec('echo b > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function sendDetection()
+    static function sendDetection()
     {
-        exec('echo a > '.$this->portAddress.'');
+        exec('echo a > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function setRelay($value)
+    static function setRelay($value)
     {
-        exec('(echo c'.$value.'; sleep 1) > '.$this->portAddress.'');
+        exec('(echo c'.$value.'; sleep 1) > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function setRelayVer2($value)
+    static function setRelayVer2($value)
     {
-        exec('(echo C'.$value.'; sleep 1) > '.$this->portAddress.'');
+        exec('(echo C'.$value.'; sleep 1) > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function sendWeatherRequest()
+    static function sendWeatherRequest()
     {
-        exec('echo W > '.$this->portAddress.'');
+        exec('echo W > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function calibrateRelay($value)
+    static function calibrateRelay($value)
     {
-        exec('echo K > '.$this->portAddress.'');
+        exec('echo K > '.ArduinoDataProvider::$portAddress.'');
     }
 
-    function setHeating($value)
+    static function setHeating($value)
     {
-        exec('(echo h'.$value.'; sleep 1) > '.$this->portAddress);
+        exec('(echo h'.$value.'; sleep 1) > '.ArduinoDataProvider::$portAddress);
     }
 
-    function setNewPhoneNumber($value)
+    static function setNewPhoneNumber($value)
     {
-        exec('(echo T'.$value.'; sleep 2) > '.$this->portAddress);
+        exec('(echo T'.$value.'; sleep 2) > '.ArduinoDataProvider::$portAddress);
     }
 
-    function setSirenTime($minutes)
+    static function setSirenTime($minutes)
     {
-        exec('(echo t'.$minutes.'; sleep 1) > '.$this->portAddress);
+        exec('(echo t'.$minutes.'; sleep 1) > '.ArduinoDataProvider::$portAddress);
     }
 
-    function setSystemSettings($setting, $value)
+    static function setSystemSettings($setting, $value)
     {
-        exec('(echo e'.$setting.' '.$value.'; sleep 1) > '.$this->portAddress);
+        exec('(echo e'.$setting.' '.$value.'; sleep 1) > '.ArduinoDataProvider::$portAddress);
     }
 
-    function restartServer()
+    static function restartServer()
     {
         exec('sudo shutdown -r 0');
 
@@ -78,36 +80,39 @@ class ArduinoDataProvider
 
     // ---------------------------------------
 
-    function setHeatingTemperature($value)
+    static function setHeatingTemperature($value)
     {
-        $addressString = $this->regulatorAddress."/?temp=".$value;
+        $addressString = ArduinoDataProvider::$regulatorAddress."/?temp=".$value;
         @$response = file_get_contents($addressString);
     }
 
-    function setHeatingAmplitude($value)
+    static function setHeatingAmplitude($value)
     {
-        $addressString = $this->regulatorAddress."/?ampl=".$value;
+        $addressString = ArduinoDataProvider::$regulatorAddress."/?ampl=".$value;
         @$response = file_get_contents($addressString);
     }
 
-    function setHeatingMode($value)
+    static function setHeatingMode($value)
     {
-        $addressString = $this->regulatorAddress."?mode=".$value;
+        $addressString = ArduinoDataProvider::$regulatorAddress."?mode=".$value;
         @$response = file_get_contents($addressString);
     }
 
-    function setHeatingDate()
+    static function setHeatingDatetime()
     {
         $currentDate = date_create()->format('d.m.Y');
         $currentDayOfWeek = date_create()->format('N');
-        $addressString = $this->regulatorAddress."?date=".$currentDayOfWeek.":".$currentDate;
+        $addressString = ArduinoDataProvider::$regulatorAddress."?date=".$currentDayOfWeek.":".$currentDate;
+        @$response = file_get_contents($addressString);
+
+        $currentTime = date_create()->format('H:i:s');
+        $addressString = ArduinoDataProvider::$regulatorAddress."?time=".$currentTime;
         @$response = file_get_contents($addressString);
     }
 
-    function setHeatingTime()
+    static function setBlindsLevel($value)
     {
-        $currentTime = date_create()->format('H:i:s');
-        $addressString = $this->regulatorAddress."?time=".$currentTime;
+        $addressString = ArduinoDataProvider::$blindsAddress."?level=".$value;
         @$response = file_get_contents($addressString);
     }
 
