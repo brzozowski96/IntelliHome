@@ -1,0 +1,89 @@
+<?php
+
+namespace Brzozowski\IntelliHomeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * HeatingTimetable
+ *
+ * @ORM\Table(name="heating_timetable")
+ * @ORM\Entity
+ */
+class HeatingTimetable
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="DayOfWeek", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $dayOfWeek;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StartBlock1", type="time", nullable=false)
+     */
+    private $startBlock1;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StopBlock1", type="time", nullable=false)
+     */
+    private $stopBlock1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ModeBlock1", type="integer", nullable=false)
+     */
+    private $modeBlock1;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StartBlock2", type="time", nullable=true)
+     */
+    private $startBlock2;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StopBlock2", type="time", nullable=true)
+     */
+    private $stopBlock2;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ModeBlock2", type="integer", nullable=true)
+     */
+    private $modeBlock2;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StartBlock3", type="time", nullable=true)
+     */
+    private $startBlock3;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="StopBlock3", type="time", nullable=true)
+     */
+    private $stopBlock3;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ModeBlock3", type="integer", nullable=true)
+     */
+    private $modeBlock3;
+
+
+}
+

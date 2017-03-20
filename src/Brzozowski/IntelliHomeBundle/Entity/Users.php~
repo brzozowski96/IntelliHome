@@ -1,0 +1,153 @@
+<?php
+namespace Brzozowski\IntelliHomeBundle\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="registrations")
+ */
+class Users
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message = "Wpisz swoje imię."
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z]+$/",
+     *     message="Wpisz tutaj swoje prawidłowe imię"
+     * )
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message = "Wpisz swoje nazwisko."
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z]+$/",
+     *     message="Wpisz tutaj swoje prawidłowe nazwisko"
+     * )
+     */
+    protected $surname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message = "Wpisz swój login."
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9]+$/",
+     *     message="Login może zawierać tylko litery i cyfry"
+     * )
+     */
+    protected $login;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message = "Wpisz swoje hasło."
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9]+$/",
+     *     message="Login może zawierać tylko litery i cyfry"
+     * )
+     */
+    protected $password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank()
+     *
+     * @Assert\Email(
+     *     message="Wpisz tutaj prawidłowy adres E-mail"
+     * )
+     * @Assert\Length(
+     *     max=255
+     * )
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="string", length=1, nullable=true)
+     *
+     * @Assert\Choice(
+     *     choices = { "m", "f"},
+     *     message = "Wybierz płeć."
+     * )
+     */
+    protected $sex;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     *
+     * @Assert\Date(
+     *     message = "Wybierz datę."
+     * )
+     */
+    protected $birthdate;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $role;
+
+    /**
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Wybierz prawidłowy plik PDF"
+     * )
+     */
+    protected $avatarFile;
+
+    /**
+     * @Assert\NotBlank(
+     *     message="Musisz zaakceptować regulamin"
+     * )
+     */
+    protected $rules;
+
+
+
+    public function save($savePath)
+    {
+        $paramsNames = array('name', 'email', 'sex', 'birthdate', 'country', 'course', 'invest', 'comments', 'payment_file');
+        $formData = array();
+        foreach ($paramsNames as $name)
+        {
+            $formData[$name] = $this->{$name};
+        }
+
+        $randVal = rand(1000, 9999);
+        $dataFileName = sprintf('data_%d.txt', $randVal);
+
+        //file_put_contents($savePath, $dataFileName, print_r($formData, TRUE));
+        file_put_contents($savePath.$dataFileName, print_r($formData, TRUE));
+
+        $file = $this->getPaymentFile();
+        if(NULL !== $file)
+        {
+            $newName = sprintf('file_%d.%s', $randVal, $file->guessExtension());
+            $file->move($savePath, $newName);
+        }
+    }
+
+
+}
+?>

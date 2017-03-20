@@ -1,0 +1,61 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div id="pagecontainer" class="container">
+    <div class="panel panel-default form-login">
+        <div class="panel-body">
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                {% if csrf_token %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                {% endif %}
+                <img src="{{ asset('bundles/brzozowskiintellihome/img/logo.jpg') }}" class="logo" alt="IntelliHome">
+                <!--
+                <span style="font-size:28px;color:green"><span style="font-size:24px" class="glyphicon glyphicon-grain" aria-hidden="true"> <span style="font-size:28px">Smart</span> <span style="font-size:28px;color:black">Home</span></span></span>
+                -->
+                <span style="font-size:28px;color:green">Intelli</span><span style="font-size:28px;color:black">Home</span>
+
+                <div class="form-group tooltipButton" data-toggle="tooltip" data-placement="right" title="Login wersji demonstracyjnej: user">
+                    <label class="visuallyhidden" for="login">Login użytkownika</label>
+                    <input type="text" class="form-control" id="login" name="_username" value="{{ last_username }}" placeholder="Login użytkownika">
+                </div>
+                <div class="form-group tooltipButton" data-toggle="tooltip" data-placement="right" title="Hasło wersji demonstracyjnej: user">
+                    <label class="visuallyhidden" for="login">Hasło</label>
+                    <input type="password" class="form-control" id="haslo" name="_password" placeholder="Hasło użytkownika">
+                </div>
+                {% if error %}
+                    <div class="form-group alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        <b>{{ error.messageKey|trans(error.messageData, 'security') }}</b>
+                    </div>
+                {% endif %}
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on">
+                <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+
+                <input type="submit" class="btn btn-block btn-default" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}">
+
+                <a href="{{ path('fos_user_registration_register') }}" class="btn btn-link btn-xs">Zarejestruj się</a>
+                {#<a href="{{ path('fos_user_change_password') }}" class="btn btn-link btn-xs">Przypomnij hasło</a>#}
+            </form>
+        </div>
+    </div>
+</div>
+<br><br><br>
+
+{#
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    {% if csrf_token %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    {% endif %}
+
+    <label for="username">{{ 'security.login.username'|trans }}</label>
+    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+
+    <label for="password">{{ 'security.login.password'|trans }}</label>
+    <input type="password" id="password" name="_password" required="required" />
+
+    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+
+    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+</form>
+#}

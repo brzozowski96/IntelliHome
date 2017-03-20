@@ -1,0 +1,357 @@
+{% extends 'BrzozowskiIntelliHomeBundle::base.html.twig' %}
+
+{% block pageTitle %}
+    Harmonogram | {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function(){
+            $("#saveHeatingTimetableSettings").click(function(e) {
+                e.preventDefault();
+                var data = [];
+                var entity;
+                for(var dayOfWeek=1; dayOfWeek<=7; dayOfWeek++) {
+                    entity = {
+                        StartBlock1: $('#day' + dayOfWeek + 'StartBlock1').val(),
+                        StopBlock1: $('#day' + dayOfWeek + 'StopBlock1').val(),
+                        ModeBlock1: $('#day' + dayOfWeek + 'ModeBlock1').val(),
+                        StartBlock2: $('#day' + dayOfWeek + 'StartBlock2').val(),
+                        StopBlock2: $('#day' + dayOfWeek + 'StopBlock2').val(),
+                        ModeBlock2: $('#day' + dayOfWeek + 'ModeBlock2').val(),
+                        StartBlock3: $('#day' + dayOfWeek + 'StartBlock3').val(),
+                        StopBlock3: $('#day' + dayOfWeek + 'StopBlock3').val(),
+                        ModeBlock3: $('#day' + dayOfWeek + 'ModeBlock3').val()
+                    };
+                    data[dayOfWeek] = entity;
+                }
+                //console.log(data);
+
+                $.ajax({
+                    url: '{{ path('intellihome_automation_timetable_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'timetable': data },
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $('#saveHeatingModeSettings').click(function(e){
+                e.preventDefault();
+                var dayMode = $('#dayMode').val();
+                var nightMode = $('#nightMode').val();
+                var holidayMode = $('#holidayMode').val();
+
+                $.ajax({
+                    url: '{{ path('intellihome_automation_heatingmode_update') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'dayMode': dayMode, 'nightMode': nightMode, 'holidayMode': holidayMode},
+                    success:function(d){
+                        //console.log(d);
+                    },
+                    error : function(){
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("[id$='StopBlock1']").change(function(e){
+            //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "23:59"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StartBlock2").val("NULL");
+                    $("#"+dayToNullable+"StopBlock2").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock2").val("NULL");
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+
+            });
+            $("[id$='StartBlock2']").change(function(e){
+                //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "NULL"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StopBlock1").val("23:59");
+                    $("#"+dayToNullable+"StopBlock2").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock2").val("NULL");
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StopBlock1";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) - Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":59");
+//                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == "NULL")
+//                    $(selectToRefresh).val("23:59");
+                else $(selectToRefresh).val(timeToUpdate+":59");
+
+            });
+            {#
+            $("[id$='StartBlock2']").change(function(e){
+                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+                if(valueOfChangedSelect = "NULL"){
+                    $('#day1Block2row').hide();
+                    $('#day1Block3row').hide();
+                }
+                console.log(valueOfChangedSelect);
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+
+            });
+            #}
+            $("[id$='StopBlock2']").change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "23:59"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StartBlock3").val("NULL");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StartBlock3";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) + Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":00");
+                else if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) == 23)
+                    $(selectToRefresh).val("NULL");
+                else $(selectToRefresh).val(timeToUpdate+":00");
+                $("#"+dayToRefresh+"StopBlock3").val("23:59");
+
+            });
+            $("[id$='StartBlock3']").change(function(e){
+                //$(':contains("StopBlock1")').change(function(e){
+//                console.log(e.target.id);
+                var changedSelect = "#"+e.target.id;
+                var valueOfChangedSelect = $(changedSelect).val();
+//                console.log(valueOfChangedSelect);
+                if(valueOfChangedSelect == "NULL"){
+                    var dayToNullable = e.target.id.substring(0, 4);
+                    $("#"+dayToNullable+"StopBlock2").val("23:59");
+                    $("#"+dayToNullable+"StopBlock3").val("NULL");
+                    $("#"+dayToNullable+"ModeBlock3").val("NULL");
+                    return 0;
+                }
+                var dayToRefresh = e.target.id.substring(0, 4);
+                var selectToRefresh = "#"+dayToRefresh+"StopBlock2";
+                timeToUpdate = Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) - Number(1);
+                if(Number(valueOfChangedSelect.substring(0, valueOfChangedSelect.indexOf(':'))) < 9 )
+                    $(selectToRefresh).val("0"+timeToUpdate+":59");
+                else $(selectToRefresh).val(timeToUpdate+":59");
+                $("#"+dayToRefresh+"StopBlock3").val("23:59");
+
+            });
+        });
+    </script>
+{%  endblock %}
+
+{% block pageContainer %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Ogrzewanie
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <h4>Harmonogram ogrzewania</h4>
+                    <a href="{{ path('intellihome_automation') }}"><button class="btn btn-default">Powrót</button></a>
+                    <form action="{{ path('intellihome_automation_timetable') }}" method="post">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Dzień tygodnia</th>
+                                <th>Blok godzinowy</th>
+                                <th>Tryb pracy kotła</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for row in timetable %}
+                                {% for i in 1..3 %}
+                                <tr id="day{{ row.dayOfWeek }}Block{{ i }}row">
+                                {#{% for i in 1..3 %}#}
+                                {% if i == 1 %}
+                                    <td rowspan="3">{{ getDayName(row.dayOfWeek) }}</td>
+                                {% endif %}
+                                    <td>
+                                        <select name="day{{ row.dayOfWeek }}StartBlock{{ i }}" id="day{{ row.dayOfWeek }}StartBlock{{ i }}" class="time-table-field">
+                                            {% if i == 1 %}
+                                                <option value="{{ row.getStartBlock1|date('H:i') }}" selected>0:00</option>
+                                            {% else %}
+                                                {% set startBlock = row.getStartBlock(i)|date('H:i') %}
+                                                <option value="NULL" {% if startBlock == NULL %} selected {% endif %}></option>
+                                                {#<option value="00:00" {% if startBlock == '00:00' %} selected {% endif %}>0:00</option>#}
+                                                <option value="01:00" {% if startBlock == '01:00' %} selected {% endif %}>1:00</option>
+                                                <option value="02:00" {% if startBlock == '02:00' %} selected {% endif %}>2:00</option>
+                                                <option value="03:00" {% if startBlock == '03:00' %} selected {% endif %}>3:00</option>
+                                                <option value="04:00" {% if startBlock == '04:00' %} selected {% endif %}>4:00</option>
+                                                <option value="05:00" {% if startBlock == '05:00' %} selected {% endif %}>5:00</option>
+                                                <option value="06:00" {% if startBlock == '06:00' %} selected {% endif %}>6:00</option>
+                                                <option value="07:00" {% if startBlock == '07:00' %} selected {% endif %}>7:00</option>
+                                                <option value="08:00" {% if startBlock == '08:00' %} selected {% endif %}>8:00</option>
+                                                <option value="09:00" {% if startBlock == '09:00' %} selected {% endif %}>9:00</option>
+                                                <option value="10:00" {% if startBlock == '10:00' %} selected {% endif %}>10:00</option>
+                                                <option value="11:00" {% if startBlock == '11:00' %} selected {% endif %}>11:00</option>
+                                                <option value="12:00" {% if startBlock == '12:00' %} selected {% endif %}>12:00</option>
+                                                <option value="13:00" {% if startBlock == '13:00' %} selected {% endif %}>13:00</option>
+                                                <option value="14:00" {% if startBlock == '14:00' %} selected {% endif %}>14:00</option>
+                                                <option value="15:00" {% if startBlock == '15:00' %} selected {% endif %}>15:00</option>
+                                                <option value="16:00" {% if startBlock == '16:00' %} selected {% endif %}>16:00</option>
+                                                <option value="17:00" {% if startBlock == '17:00' %} selected {% endif %}>17:00</option>
+                                                <option value="18:00" {% if startBlock == '18:00' %} selected {% endif %}>18:00</option>
+                                                <option value="19:00" {% if startBlock == '19:00' %} selected {% endif %}>19:00</option>
+                                                <option value="20:00" {% if startBlock == '20:00' %} selected {% endif %}>20:00</option>
+                                                <option value="21:00" {% if startBlock == '21:00' %} selected {% endif %}>21:00</option>
+                                                <option value="22:00" {% if startBlock == '22:00' %} selected {% endif %}>22:00</option>
+                                                <option value="23:00" {% if startBlock == '23:00' %} selected {% endif %}>23:00</option>
+                                            {% endif %}
+                                        </select>
+                                        -
+                                        <select name="day{{ row.dayOfWeek }}StopBlock{{ i }}" id="day{{ row.dayOfWeek }}StopBlock{{ i }}" class="time-table-field">
+                                            {% if i == 3 %}
+                                                <option value="NULL"></option>
+                                                <option value="{{ row.getStopBlock3|date('H:i') }}" selected>23:59</option>
+                                            {% else %}
+                                                {% set stopBlock = row.getStopBlock(i)|date('H:i') %}
+                                                {% if i == 2 %}
+                                                    <option value="NULL" {% if stopBlock == NULL %} selected {% endif %}></option>
+                                                {% endif %}
+                                                <option value="00:59" {% if stopBlock == '00:59' %} selected {% endif %}>0:59</option>
+                                                <option value="01:59" {% if stopBlock == '01:59' %} selected {% endif %}>1:59</option>
+                                                <option value="02:59" {% if stopBlock == '02:59' %} selected {% endif %}>2:59</option>
+                                                <option value="03:59" {% if stopBlock == '03:59' %} selected {% endif %}>3:59</option>
+                                                <option value="04:59" {% if stopBlock == '04:59' %} selected {% endif %}>4:59</option>
+                                                <option value="05:59" {% if stopBlock == '05:59' %} selected {% endif %}>5:59</option>
+                                                <option value="06:59" {% if stopBlock == '06:59' %} selected {% endif %}>6:59</option>
+                                                <option value="07:59" {% if stopBlock == '07:59' %} selected {% endif %}>7:59</option>
+                                                <option value="08:59" {% if stopBlock == '08:59' %} selected {% endif %}>8:59</option>
+                                                <option value="09:59" {% if stopBlock == '09:59' %} selected {% endif %}>9:59</option>
+                                                <option value="10:59" {% if stopBlock == '10:59' %} selected {% endif %}>10:59</option>
+                                                <option value="11:59" {% if stopBlock == '11:59' %} selected {% endif %}>11:59</option>
+                                                <option value="12:59" {% if stopBlock == '12:59' %} selected {% endif %}>12:59</option>
+                                                <option value="13:59" {% if stopBlock == '13:59' %} selected {% endif %}>13:59</option>
+                                                <option value="14:59" {% if stopBlock == '14:59' %} selected {% endif %}>14:59</option>
+                                                <option value="15:59" {% if stopBlock == '15:59' %} selected {% endif %}>15:59</option>
+                                                <option value="16:59" {% if stopBlock == '16:59' %} selected {% endif %}>16:59</option>
+                                                <option value="17:59" {% if stopBlock == '17:59' %} selected {% endif %}>17:59</option>
+                                                <option value="18:59" {% if stopBlock == '18:59' %} selected {% endif %}>18:59</option>
+                                                <option value="19:59" {% if stopBlock == '19:59' %} selected {% endif %}>19:59</option>
+                                                <option value="20:59" {% if stopBlock == '20:59' %} selected {% endif %}>20:59</option>
+                                                <option value="21:59" {% if stopBlock == '21:59' %} selected {% endif %}>21:59</option>
+                                                <option value="22:59" {% if stopBlock == '22:59' %} selected {% endif %}>22:59</option>
+                                                <option value="23:59" {% if stopBlock == '23:59' %} selected {% endif %}>23:59</option>
+                                            {% endif %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="day{{ row.dayOfWeek }}ModeBlock{{ i }}" id="day{{ row.dayOfWeek }}ModeBlock{{ i }}" class="mode-table-field">
+                                            <option value="NULL"></option>
+                                            <option value="1" {% if row.getModeBlock(i) == 1 %} selected {% endif %} >Dzienny</option>
+                                            <option value="2" {% if row.getModeBlock(i) == 2 %} selected {% endif %} >Nocny</option>
+                                            <option value="3" {% if row.getModeBlock(i) == 3 %} selected {% endif %} >Wakacyjny</option>
+                                            <option value="4" {% if row.getModeBlock(i) == 4 %} selected {% endif %} >Wyłączony</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">Brak danych.</td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                        <a href="{{ path('intellihome_automation') }}"><button class="btn btn-default">Powrót</button></a>
+                        <button type="submit" id="saveHeatingTimetableSettings" class="btn btn-info">Zapisz</button>
+                    </form>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12" style="border-left:solid 1px #ccc">
+                    <h4>Tryby pracy</h4>
+                    <form action="{{ path('intellihome_automation_timetable') }}" method="post">
+                        <div class="form-group">
+                            <label>Temperatura trybu dziennego:</label>
+                            <div class="input-group">
+                                <input id="dayMode" name="dayMode" type="text" class="form-control" value="{{ heatingModes[0].temperature }}">
+                                <div class="input-group-addon"> <sup>o</sup>C </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Temperatura trybu nocnego:</label>
+                            <div class="input-group">
+                                <input id="nightMode" name="nightMode" type="text" class="form-control" value="{{ heatingModes[1].temperature }}">
+                                <div class="input-group-addon"> <sup>o</sup>C </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Temperatura trybu wakacyjnego:</label>
+                            <div class="input-group">
+                                <input id="holidayMode" name="holidayMode" type="text" class="form-control" value="{{ heatingModes[2].temperature }}">
+                                <div class="input-group-addon"> <sup>o</sup>C </div>
+                            </div>
+                        </div>
+                        <button id="saveHeatingModeSettings" type="submit" class="btn btn-info">Zapisz</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

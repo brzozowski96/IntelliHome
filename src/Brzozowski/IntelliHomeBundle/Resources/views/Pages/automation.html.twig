@@ -1,0 +1,257 @@
+{% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
+
+{% block pageTitle %}
+    Automatyka | {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function(){
+
+            $("#btnHeatingOperatingMode :input").change(function() {
+                var btnStatus = this.value;
+                $.ajax({
+                    url: '{{ path('intellihome_automation_heating_mode') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'heatingMode': btnStatus},
+                    success: function (d) {
+                        //console.log(d);
+                        if(btnStatus == 0) {
+                            $('#staticLabel').removeClass("btn-default").addClass("btn-success");
+                            $('#scheduledLabel').removeClass("btn-success").addClass("btn-default");
+                            $('#offLabel').removeClass("btn-success").addClass("btn-default");
+                        }
+                        else if(btnStatus == 1) {
+                            $('#staticLabel').removeClass("btn-success").addClass("btn-default");
+                            $('#scheduledLabel').removeClass("btn-default").addClass("btn-success");
+                            $('#offLabel').removeClass("btn-success").addClass("btn-default");
+                        }
+                        else if(btnStatus == 2) {
+                            $('#staticLabel').removeClass("btn-success").addClass("btn-default");
+                            $('#scheduledLabel').removeClass("btn-success").addClass("btn-default");
+                            $('#offLabel').removeClass("btn-default").addClass("btn-success");
+                        }
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#setRegulatorDatetime").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_datetime') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#setRegulatorSettings").click(function() {
+                var temperature = parseFloat($('#heatingTemperature').text());
+                var amplitude = parseFloat($('#heatingAmplitude').text());
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_regulator') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'temperature': temperature, 'amplitude': amplitude},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $('#heatingTemperatureUp').click(function() {
+                var currentValue = parseFloat($('#heatingTemperature').text());
+                currentValue = currentValue+0.5;
+                if(currentValue < 30.5)
+                    $('#heatingTemperature').text(currentValue.toFixed(1));
+            });
+
+            $('#heatingTemperatureDown').click(function() {
+                var currentValue = $('#heatingTemperature').text();
+                currentValue = currentValue-0.5;
+                if(currentValue > 4.5)
+                    $('#heatingTemperature').text(currentValue.toFixed(1));
+            });
+
+            $('#heatingAmplitudeUp').click(function() {
+                var currentValue = parseFloat($('#heatingAmplitude').text());
+                currentValue = currentValue+0.1;
+                if(currentValue < 0.6)
+                    $('#heatingAmplitude').text(currentValue.toFixed(1));
+            });
+
+            $('#heatingAmplitudeDown').click(function() {
+                var currentValue = $('#heatingAmplitude').text();
+                currentValue = currentValue-0.1;
+                if(currentValue > 0.0)
+                    $('#heatingAmplitude').text(currentValue.toFixed(1));
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block pageContainer %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Ogrzewanie
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+                        <h4>Tryb pracy ogrzewania</h4>
+                        <section class="centerElement">
+                            <div id="btnHeatingOperatingMode" class="btn-group" data-toggle="buttons">
+                                <label id="staticLabel"class="btn btn-sm
+                                    {% if heating.operatingMode == 0 %}
+                                       btn-success
+                                    {% else %}
+                                       btn-default
+                                   {% endif %}
+                                 btn-HOMode">
+                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                <br>
+                                <input type="radio" name="HOMode" value="0">Stały
+                                </label>
+                                <label id="scheduledLabel" class="btn btn-sm
+                                    {% if heating.operatingMode == 1 %}
+                                       btn-success
+                                    {% else %}
+                                       btn-default
+                                   {% endif %}
+                                 btn-HOMode">
+                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                <br>
+                                <input type="radio" name="HOMode" value="1">Planowy
+                                </label>
+                                <label id="offLabel"class="btn btn-sm
+                                    {% if heating.operatingMode == 2 %}
+                                       btn-success
+                                    {% else %}
+                                       btn-default
+                                   {% endif %}
+                                 btn-HOMode">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                <br>
+                                <input type="radio" name="HOMode" value="2">Wyłączony
+                                </label>
+                            </div>
+                        </section>
+
+                        <br><br>
+                        <h4>Stan aktualny ({{ temporary.time|date('H:i') }}, {{ temporary.date|date('d.m.Y') }})</h4>
+                        <div class="jumbotron container-fluid" style="padding: 10px">
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <img class="img-responsive" src="{{ asset('bundles/brzozowskiintellihome/img/heater.png') }}" alt="heater">
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">
+                            </div>
+                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                <p style="margin:0">Temperatura:</p>
+                                    <p class="centerElement" style="font-size: 38px; margin:0; color:#064478"><b>{{ temporary.HomeTemperature }}<sup>o</sup>C</b></p>
+                                <p style="margin:0">Wilgotność: </p>
+                                    <p class="centerElement" style="font-size: 38px; margin:0; color:#064478"><b>{{ temporary.HomeHumidity }}%</b></p>
+                            </div>
+                        </div>
+
+                        <h4>Ustawienia ({{ heating.time|date('H:i') }}, {{ heating.date|date('d.m.Y') }})</h4>
+                        <div class="jumbotron container-fluid" style="padding: 10px;">
+                                <div class="col-md-3 col-sm-3 col-xs-8 centerElement">
+                                    <p style="margin:0">Ogrzewanie</p>
+                                    <p style="font-size: 28px; margin:0; color:#064478"><b><span id="heatingTemperature">{{ heating.temperature }}</span><sup>o</sup>C</b></p>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-4">
+                                    <div class="btn-group-vertical" role="group" aria-label="...">
+                                        <button id="heatingTemperatureUp" type="button" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                                        </button>
+                                        <button id="heatingTemperatureDown" type="button" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="hidden-lg hidden-md  hidden-sm col-xs-12 centerElement">
+                                    <br><br>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-8 centerElement">
+                                    <p style="margin:0">Amplituda</p>
+                                    <p style="font-size: 28px; margin:0; color:#064478"><b><span id="heatingAmplitude">{{ heating.amplitude }}</span><sup>o</sup>C</b></p>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-4">
+                                    <div class="btn-group-vertical" role="group" aria-label="...">
+                                        <button id="heatingAmplitudeUp" type="button" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                                        </button>
+                                        <button id="heatingAmplitudeDown" type="button" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="hidden-lg hidden-md  hidden-sm col-xs-12 centerElement">
+                                    <br><br>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 centerElement">
+                                    <br>
+                                    <button id="setRegulatorSettings" class="btn btn-info">Zaktualizuj</button>
+                                    <br><br><br>
+                                </div>
+                        </div>
+
+                        <a href="{{ path('intellihome_automation_timetable') }}">
+                            <button class="btn btn-default">
+                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Ustaw harmonogram
+                            </button>
+                        </a>
+                        <button id="setRegulatorDatetime" class="btn btn-default">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Ustaw datę i godzinę
+                        </button>
+
+                    </div>
+
+
+                    <div class="col-md-4 hidden-sm hidden-xs" style="text-align:justify;border-left:solid 1px #ccc">
+                        <h4>Informacje</h4>
+                        <p><b>Praca stała</b> - Kocioł grzewczy utrzymuje w pomieszczeniach użytkowych stałą, zadaną temperaturę.
+                            W tym trybie harmonogram zostaje zawieszony.</p>
+                        <p><b>Praca harmonogramiczna</b> - Temperatura w pomieszczeniach użytkowych zmienia się w zależności od
+                            ustawień użytkownika zgodnie z dniem tygodnia, blokiem godzinowym oraz trybem temperaturowym.</p>
+                        <p><b>Praca wyłączona</b> - Kocioł grzewczy całkowicie wstrzymuje ogrzewanie pomieszczeń. Nie zostaje
+                            on jednak wyłączony.</p>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

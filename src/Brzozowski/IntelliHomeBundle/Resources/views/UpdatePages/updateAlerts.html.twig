@@ -1,0 +1,14 @@
+
+<div id="alertsContent">
+    {% block alertContainer %}
+        {% for type,messages in app.session.flashbag.all() %}
+            {% for msg in messages %}
+                <div class="alert alert-{{ type }}" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    <b>{{ msg }}</b>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+</div>

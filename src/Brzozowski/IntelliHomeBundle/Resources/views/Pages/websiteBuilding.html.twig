@@ -1,0 +1,31 @@
+{% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
+
+    {% block pageTitle %}
+        Przepraszamy | {{ parent() }}
+    {% endblock %}
+
+    {#{% block navigation %}{% endblock %}#}
+
+    {% block alertContainer %}{% endblock %}
+
+    {% block pageContainer %}
+        <div class="container">
+            <div class="panel panel-default form-login">
+                <div class="panel-body">
+                    <img src="{{ asset('bundles/brzozowskiintellihome/img/logo.jpg') }}" class="logo" alt="Smart Home">
+                    <div class="form-group">
+                        <label>Strona w budowie. Opcja dostępna niedługo.</label>
+                    </div>
+                    <a href="{{ path('intellihome_login') }}" class="btn btn-link btn-xs">Wróć</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    {% endblock %}
+
+    {#{% block footer %}{% endblock %}#}

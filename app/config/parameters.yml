@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: intellihome
+    database_user: root
+    database_password: null
+    mailer_transport: gmail
+    mailer_host: null
+    mailer_user: brzozowski.test@gmail.com
+    mailer_password: test1996
+    secret: 66c322fc1cf7d5ad6dfd5c3b6822c5d21

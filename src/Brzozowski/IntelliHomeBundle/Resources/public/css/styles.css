@@ -1,0 +1,363 @@
+body {
+  padding-top: 75px;
+  background: url("../img/background4.jpg") fixed;
+  background-size: cover;
+}
+
+.reg-img {
+  height: 500px;
+  background: url("../img/registration_image.jpg") no-repeat;
+}
+
+.form-login {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 15px;
+}
+
+.form-login {
+  text-align: center;
+}
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.form-login button {
+  margin-bottom: 10px;
+}
+
+.form-login p {
+  margin-top: 10px;
+}
+
+.error    /* w rejestracji  */
+{
+  color: #AA3333;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+/*
+#navbar {
+	padding-bottom: 0;
+}
+*/
+.nav li {
+	margin: 0 5px;
+}
+
+.container > .row {
+	margin-top: 1%;
+}
+.container-fluid {
+	/*background-image: url("img/background.jpg");*/
+}
+nav .glyphicon {
+	font-size: 32px;
+	text-align: center;
+}
+
+.navbar ul {
+	float: right;
+	margin-right: 20%;
+}
+
+.nav li a {
+	text-align: center;
+}
+
+.alert {
+	padding: 6px;
+	margin: 2px 0px;
+}
+
+.centerElement {
+    text-align: center;
+}
+
+.panel-first-row {
+  height: 285px;
+}
+div.front {
+
+}
+.panel-first-row2 {
+  height: 285px;
+}
+
+.panel {
+        box-shadow:6px 6px 6px -1px #333;
+      }
+
+.weather-text {
+  font-size: 23px;
+}
+.weather-data {
+  float: right;
+}
+
+.notifications {
+  height: 245px;
+  overflow: auto;
+  margin: 0;
+}
+
+blockquote {
+  margin: 0px 0px;
+  padding: 0px;
+}
+blockquote div p {
+  text-align: left;
+  font-size: 16px;
+}
+blockquote div footer {
+  font-size: 12px;
+}
+
+
+.regulations-panel {
+  padding: 30px 70px;
+  text-align:justify;
+}
+
+#regulations-logo {
+  float:right;
+}
+
+.scroll-table {
+  overflow: auto;
+}
+
+/* Automation theme */
+#btnHeatingOperatingMode {
+  vertical-align: center;
+}
+
+.btn-HOMode span {
+  font-size: 28px;
+  text-align: center;
+}
+.btn-HOMode {
+  width: 130px;
+}
+
+
+/* Settings theme */
+.cards-table-field {
+  border: none;
+  width: 230px;
+}
+
+.motion-table-field {
+  border: none;
+  width: 130px;
+}
+
+/* Automation theme */
+input.time-table-field {
+  border-radius: 2px;
+  border: solid 1px lightgray;
+  height: 26px;
+  width: 100px;
+  text-align: center;
+
+}
+
+select.time-table-field {
+  border-radius: 2px;
+  border: solid 1px lightgray;
+  height: 26px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100px;
+}
+
+select.mode-table-field {
+  border-radius: 2px;
+  border: solid 1px lightgray;
+  height: 26px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 150px;
+}
+
+/* Custom page footer */
+.footer {
+  bottom: 0;
+  width:100%;
+
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+  background-color: white;
+  padding: 19px 15px 0.8%;
+}
+
+nav .glyphicon {
+    clear: both;
+    width: 100%
+}
+nav li {
+  width: 100px;
+}
+
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+  
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+  body {
+    padding-top: 125px;
+  }
+  .navbar ul {
+    margin-right: 11%;
+  }
+  nav li {
+    width: 100px;
+  }
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* Remove the padding we set earlier */
+  .navbar ul {
+    margin-right: 10%;
+  }
+  nav li {
+    width: 95px;
+  }
+  /* zwiekszyc margin-top pod nawigacja */
+  body {
+    padding-top: 125px;
+  }
+
+  .quick-control {
+    margin-top: 30px;
+  }
+
+  .footer {
+
+    padding-right: 0;
+    padding-left: 0;
+  }
+  #regulations-logo {
+  width: 120px;
+  }
+}
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+
+  body {
+    padding-top: 50px;
+  }
+
+  nav .glyphicon {
+    font-size: 26px;
+    padding-left: 200px;
+    padding-right: 40px;
+    text-align: center;
+    float: left;
+    width: 20%;
+  }
+
+  .navbar ul {
+    float: none;
+    margin: 0 auto;
+  }
+
+  .nav li {
+    width: auto;
+  }
+
+  .nav li a {
+    text-align: left;
+
+  }
+
+  .regulations-panel {
+    padding: 50px 40px;
+  }
+  #regulations-logo {
+  width: 100px;
+  }
+
+  .btn-HOMode span {
+    font-size: 26px;
+  }
+
+}
+
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+
+  nav .glyphicon {
+  font-size: 20px;
+  padding-left: 100px;
+  padding-right: 30px;
+  text-align: center;
+  float: left;
+  width: 40%;
+  }
+
+  .navbar ul {
+    float: none;
+    margin: 0 auto;
+  }
+
+  .nav li {
+    width: auto;
+  }
+
+  .nav li a {
+    text-align: left;
+
+  }
+
+  .regulations-panel {
+    padding: 40px 30px;
+  }
+
+  .regulations-panel a span {
+    font-size: 12px;
+  }
+  #regulations-logo {
+  width: 100px;
+  }
+
+  .btn-HOMode {
+    width: 100px;
+  }
+  .btn-HOMode {
+    width: 100px;
+    font-size: 16px;
+  }
+
+}

@@ -1,0 +1,26 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block pageTitle %}
+    Logowanie | {{ parent() }}
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
+{% block fos_user_content %}
+    {{ include('@FOSUser/Security/login_content.html.twig') }}
+{% endblock fos_user_content %}
+
+{% block footer %}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+
+    $(document).ready(function() {
+
+        $('.tooltipButton').tooltip();
+    });
+
+    </script>
+{% endblock %}

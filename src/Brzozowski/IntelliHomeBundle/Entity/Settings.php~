@@ -1,0 +1,84 @@
+<?php
+
+namespace Brzozowski\IntelliHomeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Settings
+ *
+ * @ORM\Table(name="settings")
+ * @ORM\Entity
+ */
+class Settings
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="AlarmPhoneNumber", type="string", length=15, nullable=false)
+     */
+    private $alarmPhoneNumber;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="BlindTime", type="integer", nullable=false)
+     */
+    private $blindTime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="SirenTime", type="integer", nullable=false)
+     */
+    private $sirenTime;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ShowCameraViewWhenAlarmDeactivated", type="boolean", nullable=false)
+     */
+    private $showCameraViewWhenAlarmDeactivated;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ChangeBlindsAfterAlarmActicated", type="boolean", nullable=false)
+     */
+    private $changeBlindsAfterAlarmActicated;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ChangeHeatingAfterAlarmActicated", type="boolean", nullable=false)
+     */
+    private $changeHeatingAfterAlarmActicated;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="PreventHeating", type="boolean", nullable=false)
+     */
+    private $preventHeating;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="PreventBlindsDamage", type="boolean", nullable=false)
+     */
+    private $preventBlindsDamage;
+
+
+
+
+}
+

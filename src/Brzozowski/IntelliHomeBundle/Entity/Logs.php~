@@ -1,0 +1,47 @@
+<?php
+
+namespace Brzozowski\IntelliHomeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Logs
+ *
+ * @ORM\Table(name="logs")
+ * @ORM\Entity
+ */
+class Logs
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Date", type="date", nullable=false)
+     */
+    private $date;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Time", type="time", nullable=false)
+     */
+    private $time;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Content", type="string", length=250, nullable=false)
+     */
+    private $content;
+
+
+}
+

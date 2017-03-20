@@ -1,0 +1,42 @@
+{% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
+
+{% block pageTitle %}
+    Logowanie | {{ parent() }}
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
+{% block pageContainer %}
+    <div id="pagecontainer" class="container">
+        <div class="panel panel-default form-login">
+            <div class="panel-body">
+
+                {#{{ form(form, {'attr': {'novalidate': 'true'}}) }}#}
+
+                <form action="{{ path('intellihome_panel') }}" method="post">
+                    <img src="{{ asset('bundles/brzozowskiintellihome/img/logo.jpg') }}" class="logo" alt="IntelliHome">
+                    <!--
+                    <span style="font-size:28px;color:green"><span style="font-size:24px" class="glyphicon glyphicon-grain" aria-hidden="true"> <span style="font-size:28px">Smart</span> <span style="font-size:28px;color:black">Home</span></span></span>
+                    -->
+                    <span style="font-size:28px;color:green">Intelli </span><span style="font-size:28px;color:black">Home</span>
+
+                    <div class="form-group">
+                        <label class="visuallyhidden" for="login">Login użytkownika</label>
+                        <input type="text" class="form-control" id="login" name="login" placeholder="Login użytkownika">
+                    </div>
+                    <div class="form-group">
+                        <label class="visuallyhidden" for="login">Hasło</label>
+                        <input type="password" class="form-control" id="haslo" name="haslo" placeholder="Hasło użytkownika">
+                    </div>
+                    <button type="submit" class="btn btn-block btn-default">Zaloguj się</button>
+                    <a href="{{ path('intellihome_register') }}" class="btn btn-link btn-xs">Zarejestruj konto</a>
+                    <a href="{{ path('intellihome_forget_password') }}" class="btn btn-link btn-xs">Przypomnij hasło</a>
+                </form>
+
+
+            </div>
+        </div>
+    </div> <!-- /container -->
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,7 @@
+#brzozowski_intelli_home_homepage:
+#    path:     /
+#    defaults: { _controller: BrzozowskiIntelliHomeBundle:Pages:index }
+
+brzozowski_intelli_home_annotations:
+    resource: "@BrzozowskiIntelliHomeBundle/Controller"
+    type:     annotation
