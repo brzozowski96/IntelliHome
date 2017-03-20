@@ -1,6 +1,0 @@
-brzozowski_intelli_home:
-    resource: "@BrzozowskiIntelliHomeBundle/Resources/config/routing.yml"
-    prefix:   /
-
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

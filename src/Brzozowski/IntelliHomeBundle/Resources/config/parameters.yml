@@ -1,9 +1,0 @@
-parameters:
-    registration_key: JDH9JD6394JF8EDID73JR
-    admin_email: brzozowski.dev@gmail.com
-
-twig:
-    globals:
-        meta_description: IntelliHome - Twój inteligentny dom.
-        meta_keywords: Smart, Home, Brzozowski, Karol, Poznań, automatyka, domowa, sterowanie, kontrola, Arduino, projekt, project
-        meta_author: Karol Brzozowski
