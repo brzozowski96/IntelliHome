@@ -66,7 +66,8 @@ class UpdatePanelPageController extends Controller
             $em->flush();
 
             if($status == 'ON' or $status == 'CHANGE') {
-                Arduino::activateAlarm();
+                $isExecuted = Arduino::activateAlarm();
+                if($isExecuted == false) return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
                 $message = "Użytkownik ".$this->getUser()->getName()." ".$this->getUser()->getSurName()." aktywował alarm używając serwisu IntelliHome";
                 $Session->getFlashBag()->add('success', 'System alarmowy aktywowany');
             }

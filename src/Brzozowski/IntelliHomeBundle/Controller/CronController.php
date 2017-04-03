@@ -195,7 +195,7 @@ class CronController extends Controller
         $url = "http://api.wunderground.com/api/7de5912a20a403a7/conditions/q/PL/Gowarzewo.json";
         $contents = file_get_contents($url);
         $contents = utf8_encode($contents);
-        $weather = json_decode($contents);
+        $weatherContent = json_decode($contents);
 
 //        $miasto = strstr($weather->current_observation->observation_location->city, ',', true);
 //        print $miasto;
@@ -219,10 +219,10 @@ class CronController extends Controller
 //        print $weather->current_observation->precip_today_metric;
 
 // SOURCE 2 - POZNAŃ
-        $url = "http://api.wunderground.com/api/7de5912a20a403a7/conditions/q/PL/Poznan.json";
-        $contents = file_get_contents($url);
-        $contents = utf8_encode($contents);
-        $weather2 = json_decode($contents);
+        $url2 = "http://api.wunderground.com/api/7de5912a20a403a7/conditions/q/PL/Poznan.json";
+        $contents2 = file_get_contents($url2);
+        $contents2 = utf8_encode($contents2);
+        $weather2 = json_decode($contents2);
 
 //        echo "<br>UV: ";
 //        print $weather2->current_observation->UV;
@@ -241,16 +241,16 @@ class CronController extends Controller
 
         //$city = strstr($weather->current_observation->observation_location->city, ',', true);
 
-        $city = $weather->current_observation->observation_location->city;
-        $temp = $weather->current_observation->temp_c;
-        $feelsLike = $weather->current_observation->feelslike_c;
-        $hum  = (int)strstr($weather->current_observation->relative_humidity, '%', true);
-        $pres = (int)$weather->current_observation->pressure_mb;
-        $wind = (float)$weather->current_observation->wind_kph;
-        $rain = (float)trim($weather->current_observation->precip_1hr_metric);
-        $rainToday = (float)$weather->current_observation->precip_today_metric;
-        $solarRadiation = $weather2->current_observation->solarradiation;
-        $uv = $weather2->current_observation->UV;
+        $city = $weatherContent->current_observation->observation_location->city;
+        $temp = $weatherContent->current_observation->temp_c;
+        $feelsLike = $weatherContent->current_observation->feelslike_c;
+        $hum  = (int)strstr($weatherContent->current_observation->relative_humidity, '%', true);
+        $pres = (int)$weatherContent->current_observation->pressure_mb;
+        $wind = (float)$weatherContent->current_observation->wind_kph;
+        $rain = (float)trim($weatherContent->current_observation->precip_1hr_metric);
+        $rainToday = (float)$weatherContent->current_observation->precip_today_metric;
+        $solarRadiation = $weatherContent->current_observation->solarradiation;
+        $uv = $weatherContent->current_observation->UV;
 
 
         $weather = new WeatherStation();

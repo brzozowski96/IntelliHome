@@ -126,6 +126,8 @@ class IncomingArduinoDataController extends Controller
                 $em->flush();
             }
 
+            if($alarmStatus == 'b') return $this->redirectToRoute('send_sms');
+
             return new Response(Response::HTTP_OK);
         }
 

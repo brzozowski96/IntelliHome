@@ -1,12 +1,12 @@
 body {
   padding-top: 75px;
-  background: url("../img/background4.jpg") fixed;
+  background: url("../img/background4.jpg") center center no-repeat;
   background-size: cover;
 }
 
 .reg-img {
   height: 500px;
-  background: url("../img/registration_image.jpg") no-repeat;
+  background: url("../img/registration_image.jpg") center center no-repeat;
 }
 
 .form-login {

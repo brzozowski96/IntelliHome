@@ -1,6 +1,7 @@
 parameters:
     registration_key: JDH9JD6394JF8EDID73JR
     admin_email: brzozowski.dev@gmail.com
+    smsapi_token: token
 
 twig:
     globals:

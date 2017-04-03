@@ -1,0 +1,2 @@
+*/10 * * * * wget -q 0 "http://localhost/cron/ogrzewanie" > /dev/null 2>&1
+*/10 * * * * wget -q 0 "http://localhost/cron/weather" > /dev/null 2>&1
