@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/user",
+ *     "/gsm",
  *     name="intellihome_user"
  * )
  */
