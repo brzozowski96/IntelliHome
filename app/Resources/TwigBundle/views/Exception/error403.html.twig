@@ -3,7 +3,7 @@
 {% extends "BrzozowskiIntelliHomeBundle::base.html.twig" %}
 
 {% block pageTitle %}
-    Nie znaleziono strony | {{ parent() }}
+    Brak dostępu | {{ parent() }}
 {% endblock %}
 
 {% block navigation %}{% endblock %}
@@ -13,8 +13,8 @@
 {% block pageContainer %}
     <div class="container">
         <div class="jumbotron">
-            <h1>Nie znaleziono strony...</h1>
-            <p>Niestety strona, której szukasz nie została znaleziona, spróbuj odświeżyć stronę lub skontaktuj się z administracją.</p>
+            <h1>Brak dostępu...</h1>
+            <p>Niestety strona, której szukasz nie pozwala na nieautoryzowany dostęp.</p>
             <p><a class="btn btn-primary btn-lg" href="{{ path('intellihome_login') }}" role="button">Wróć na stronę główną &raquo;</a></p>
         </div>
     </div>
