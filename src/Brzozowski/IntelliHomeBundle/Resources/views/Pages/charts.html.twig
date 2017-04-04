@@ -4,6 +4,175 @@
     Wykresy | {{ parent() }}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/brzozowskiintellihome/js/Chart.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $("#changeChartsRange1 :input").change(function() {
+                //console.log(this.value); // 6h, 12h, 24h, 7d
+                var btnRange = this.value;
+                refreshchart1(btnRange);
+            });
+
+            $("#changeChartsRange2 :input").change(function() {
+                //console.log(this.value); // 6h, 12h, 24h, 7d
+                var btnRange = this.value;
+                refreshchart2(btnRange);
+            });
+
+            function refreshchart1(btnRange) {
+
+
+                //$("#mycanvas").hide();
+                //$('#chart-loading').text("Ladowanie...");
+//            $('#chart-loading').text("<p style=\"padding-top: 100px;\">Ladowanie...</p>");
+
+                $.ajax({
+                    url: "{{ path('get_weather_chart_data') }}",
+                    //method: "GET",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'chartRange': btnRange},
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.length < 10) {
+                            $('#chart-loading').text("Brak wystarczającej ilości danych");
+                            return 1;
+                        }
+                        $('#chart-loading').text("").hide();
+                        $("#mycanvas").show();
+                        var time = [];
+                        var temperature = [];
+                        for (var i in data) {
+                            if (i % 10 == 0 || i == data.length - 1) time.push(data[i].time.date.substring(10, 16) + "  ");
+                            else time.push("");
+                            //time.push(data[i].time.date.substring(10, 16)+"  ");
+                            temperature.push(data[i].temperature);
+                            //else temperature.push(null);
+                        }
+
+                        var chartdata = {
+                            labels: time,
+                            datasets: [
+                                {
+                                    label: 'Temperatura na zewnątrz (ostatnie 24h)',
+                                    backgroundColor: 'rgba(200, 200, 200, 0.75)',
+                                    borderColor: 'rgba(200, 200, 200, 0.75)',
+                                    hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+                                    hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                                    data: temperature
+                                }
+                            ]
+                        };
+
+                        var ctx = $("#mycanvas");
+
+                        var barGraph = new Chart(ctx, {
+                            type: 'line',
+                            data: chartdata
+                        });
+                    },
+                    error: function (data) {
+                        //console.log(data);
+                        $('#chart-loading').text("Wystąpił błąd");
+                    }
+//                ,
+//                complete: function(){
+//                    $('#chart-loading').text("");
+//                }
+                });
+            }
+
+            function refreshchart2(btnRange) {
+
+                // Chart 2
+//                $("#mycanvas2").hide();
+//                $('#chart-loading2').show();
+                //$('#chart-loading2').text("Ladowanie...");
+//            $('#chart-loading').text("<p style=\"padding-top: 100px;\">Ladowanie...</p>");
+
+                $.ajax({
+                    url: "{{ path('get_heating_chart_data') }}",
+//                url: "./dataToChart.php",
+                    //method: "GET",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'chartRange': btnRange},
+                    success: function (data) {
+                        console.log(data);
+                        if (data.length < 10) {
+                            $('#chart-loading2').text("Brak wystarczającej ilości danych");
+                            return 1;
+                        }
+                        $('#chart-loading2').text("").hide();
+                        $("#mycanvas2").show();
+                        var time = [];
+                        var temperature = [];
+                        var setTemp = [];
+                        for (var i in data) {
+                            if (i % 10 == 0 || i == data.length - 1) time.push(data[i].time.date.substring(10, 16) + "  ");
+                            else time.push("");
+
+                            temperature.push(data[i].temperature);
+                            setTemp.push(data[i].setTemp);
+                        }
+
+                        var chartdata = {
+                            labels: time,
+                            datasets: [
+                                {
+                                    label: 'Temperatura wewnątrz (ostatnie 24h)',
+                                    backgroundColor: 'rgba(200, 200, 200, 0.75)',
+                                    borderColor: 'rgba(200, 200, 200, 0.75)',
+                                    hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+                                    hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                                    data: temperature
+                                },
+                                {
+                                    label: 'Temperatura ustawiona',
+                                    backgroundColor: 'rgba(200, 200, 200, 0.75)',
+                                    borderColor: 'rgba(100, 50, 200, 0.75)',
+                                    hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+                                    hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                                    data: setTemp
+                                }
+                            ]
+                        };
+
+                        var ctx = $("#mycanvas2");
+
+                        var barGraph = new Chart(ctx, {
+                            type: 'line',
+                            data: chartdata
+                        });
+                    },
+                    error: function (data) {
+                        //console.log(data);
+                        $('#chart-loading2').text("Wystąpił błąd");
+                    }
+//                ,
+//                complete: function(){
+//                    $('#chart-loading').text("");
+//                }
+                });
+
+            }
+
+            $("#mycanvas2").hide();
+            $('#chart-loading2').show();
+            $("#mycanvas").hide();
+            $('#chart-loading').show();
+
+            refreshchart1('12h');
+            refreshchart2('12h');
+        });
+
+    </script>
+{% endblock %}
+
 {% block pageContainer %}
     <div class="container">
         <div class="panel panel-default">
@@ -11,10 +180,48 @@
                 <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Wykresy
             </div>
             <div class="panel-body">
-
-
+                <div id="changeChartsRange1" style="float:right" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="6h">6h
+                    </label>
+                    <label class="btn btn-sm btn-default active">
+                        <input type="radio" name="chartRange2" value="12h">12h
+                    </label>
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="24h">24h
+                    </label>
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="7d">7d
+                    </label>
+                </div>
+                <div id="chart-loading" style="width: 100%; text-align: center; vertical-align: middle">
+                    <img src="http://www.ebet.com/images/loading.svg">
+                </div>
+                <div id="chart-container" style="width: 100%;height: auto;">
+                    <canvas id="mycanvas"></canvas>
+                </div>
+                <br><br>
+                <div id="changeChartsRange2" style="float:right" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="6h">6h
+                    </label>
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2 active" value="12h">12h
+                    </label>
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="24h">24h
+                    </label>
+                    <label class="btn btn-sm btn-default">
+                        <input type="radio" name="chartRange2" value="7d">7d
+                    </label>
+                </div>
+                <div id="chart-loading2" style="width: 100%; text-align: center; vertical-align: middle">
+                    <img src="http://www.ebet.com/images/loading.svg">
+                </div>
+                <div id="chart-container2" style="width: 100%;height: auto;">
+                    <canvas id="mycanvas2"></canvas>
+                </div>
             </div>
         </div>
     </div>
-    <br><br>
 {% endblock %}

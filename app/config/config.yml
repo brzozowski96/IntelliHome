@@ -64,6 +64,11 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+        dql:
+            string_functions:
+                UNIX_TIMESTAMP: DoctrineExtensions\Query\Mysql\UnixTimestamp
+                STR_TO_DATE: DoctrineExtensions\Query\Mysql\StrToDate
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"

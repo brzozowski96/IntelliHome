@@ -100,7 +100,8 @@ class PagesController extends Controller
      */
     public function chartsAction()
     {
-        return $this->render('BrzozowskiIntelliHomeBundle:Pages:websiteBuilding.html.twig');
+        return array();
+        //return $this->render('BrzozowskiIntelliHomeBundle:Pages:websiteBuilding.html.twig');
     }
 
     /**
