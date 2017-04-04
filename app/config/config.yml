@@ -79,6 +79,10 @@ fos_user:
     registration:
         form:
             type: Brzozowski\IntelliHomeBundle\Form\RegisterType
+        confirmation:
+            enabled: true
+#        resetting:
+#            enabled: true
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"

@@ -2,6 +2,24 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block pageTitle %}
+    Rejestracja | {{ parent() }}
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
 {% block fos_user_content %}
-    <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+    <div class="container">
+        <div class="col-md-2"></div>
+        <div class="panel panel-default col-md-8">
+            <div class="panel-body">
+                <h1 style="text-align: center">Potwierdź swoje konto</h1>
+
+                <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+            </div>
+        </div>
+    </div>
 {% endblock fos_user_content %}
+
+{% block footer %}{% endblock %}
+
