@@ -222,7 +222,7 @@ class CronController extends Controller
         $url2 = "http://api.wunderground.com/api/7de5912a20a403a7/conditions/q/PL/Poznan.json";
         $contents2 = file_get_contents($url2);
         $contents2 = utf8_encode($contents2);
-        $weather2 = json_decode($contents2);
+        $weatherContent2 = json_decode($contents2);
 
 //        echo "<br>UV: ";
 //        print $weather2->current_observation->UV;

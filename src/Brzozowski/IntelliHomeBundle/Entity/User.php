@@ -22,7 +22,7 @@ class User extends BaseUser
     /**
      * @ORM\Column(type="string", length=255)
      *
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(message="Wpisz swoje imię.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=255,

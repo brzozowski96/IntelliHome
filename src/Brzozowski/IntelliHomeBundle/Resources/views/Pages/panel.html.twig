@@ -268,13 +268,16 @@
                                                 <h4 class="modal-title" id="myModalLabel">Obraz z monitoringu</h4>
                                             </div>
                                             <div class="modal-body" style="padding:0 auto;">
-                                            <section class="centerElement">
-                                                <img style="width: 100%;height: auto;" name="main" id="main" border="0" src="{{ camera_address }}">
-                                                {#<img style="width: 100%;height: auto;" name="main" id="main" border="0" src="{{ asset('bundles/brzozowskiintellihome/img/home_security_camera.jpg') }}">#}
-                                            </section>
-                                            <!--
-                                            <iframe src="http://localhost/SmartHomeWebsite/camera_view.html"></iframe>
-                                            -->
+                                                <section class="centerElement">
+                                                    {% if alarm.status == 'OFF' and showCameraView == 'false' %}
+                                                        Obraz niedostępny
+                                                    {% else %}
+                                                        <a data-toggle="modal" data-target="#myModal">
+                                                            <img style="width: 100%;height: auto;" name="main" id="main" border="0" src="{{ camera_address }}">
+                                                            {#<img class="img-responsive" name="main" id="main" border="0" src="{{ asset('bundles/brzozowskiintellihome/img/home_security_camera.jpg') }}">#}
+                                                        </a>
+                                                    {% endif %}
+                                                </section>
                                             </div>
                                             <div class="modal-footer">
                                                 <a href="http://intellihomesystem.pl:81/" class="btn btn-info" style="float:left" target="_blank">Ustawienia kamery</a>
