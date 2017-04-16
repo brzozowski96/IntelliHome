@@ -32,7 +32,7 @@ class GsmController extends Controller
         $phone = $settingsRow->getAlarmPhoneNumber();
 
         $sms = new SendSMS($this->getParameter('smsapi_token'));
-        $result = $sms->sendSMS($phone, 'Włamanie!!!');
+        $result = $sms->sendSMS($phone, 'Włamanie na Lawendowej 46!!!');
 
         if($result) $message = "Wiadomość SMS o włamaniu została wysłana na: ".$phone;
         else $message = "Wystąpił błąd podczas wysyłania wiadomości SMS (".$sms->getErrorMessage().").";

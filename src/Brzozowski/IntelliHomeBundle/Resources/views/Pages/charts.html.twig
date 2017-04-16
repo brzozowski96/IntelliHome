@@ -58,7 +58,7 @@
                             labels: time,
                             datasets: [
                                 {
-                                    label: 'Temperatura na zewnątrz (ostatnie 24h)',
+                                    label: 'Temperatura na zewnątrz (ostatnie '+btnRange+')',
                                     backgroundColor: 'rgba(200, 200, 200, 0.75)',
                                     borderColor: 'rgba(200, 200, 200, 0.75)',
                                     hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
@@ -102,7 +102,7 @@
                     dataType: 'json',
                     data: {'chartRange': btnRange},
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.length < 10) {
                             $('#chart-loading2').text("Brak wystarczającej ilości danych");
                             return 1;
@@ -124,7 +124,7 @@
                             labels: time,
                             datasets: [
                                 {
-                                    label: 'Temperatura wewnątrz (ostatnie 24h)',
+                                    label: 'Temperatura wewnątrz (ostatnie '+btnRange+')',
                                     backgroundColor: 'rgba(200, 200, 200, 0.75)',
                                     borderColor: 'rgba(200, 200, 200, 0.75)',
                                     hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
@@ -205,8 +205,8 @@
                     <label class="btn btn-sm btn-default">
                         <input type="radio" name="chartRange2" value="6h">6h
                     </label>
-                    <label class="btn btn-sm btn-default">
-                        <input type="radio" name="chartRange2 active" value="12h">12h
+                    <label class="btn btn-sm btn-default active">
+                        <input type="radio" name="chartRange2" value="12h">12h
                     </label>
                     <label class="btn btn-sm btn-default">
                         <input type="radio" name="chartRange2" value="24h">24h
