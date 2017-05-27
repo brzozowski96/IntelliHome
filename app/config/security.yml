@@ -45,10 +45,10 @@ security:
     access_control:
         # Configure routes arduino, cron and gsm to be protected,
         # it means only available from local network, which contains IntelliHome devices
-        - { path: ^/arduino/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [192.168.2.0/24, 127.0.0.1, ::1]}
-        - { path: ^/arduino/, roles: ROLE_NO_ACCESS }
+#        - { path: ^/arduino/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [192.168.2.0/24, 127.0.0.1, ::1]}
+#        - { path: ^/arduino/, roles: ROLE_NO_ACCESS }
 
-#        - { path: ^/arduino, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/arduino/, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/cron/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [127.0.0.1, ::1]}
         - { path: ^/cron/, roles: ROLE_NO_ACCESS }
