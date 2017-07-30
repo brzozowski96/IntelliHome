@@ -46,6 +46,38 @@ class GsmController extends Controller
         $em->persist($log);
         $em->flush();
 
+        // --------- Send admin email -----------------------------------------------------
+
+        $dateTime = new \DateTime();
+        $adminEmail = $this->getParameter('admin_email');
+
+        $subject = 'IntelliHome - Włamanie';
+        $content = 'Wykryto włamanie';
+
+        $msgBody = $this->renderView('BrzozowskiIntelliHomeBundle:Email:adminEmail.html.twig', array(
+            'email' => $adminEmail,
+            'name' => 'Wiadomość systemowa',
+            'surname' => '',
+            'subject' => $subject,
+            'message' => $content
+        ));
+        $emailMessage = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom(array($adminEmail => 'IntelliHome Administrator'))
+            ->setTo(array('brzozowski96@gmail.com' => 'IntelliHome Administrator'))
+            ->setBody($msgBody, 'text/html');
+
+        $result = $this->get('mailer')->send($emailMessage);
+
+        $message = "System IntelliHome wysłał wiadomość o włamaniu do administratora (".$result.").";
+
+        $log = new Logs();
+        $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($log);
+        $em->flush();
+
+        // --------------------------------------------------------------------------
 
         return new Response(Response::HTTP_OK);
         //return $this->redirect($this->generateUrl('intellihome_panel'));
