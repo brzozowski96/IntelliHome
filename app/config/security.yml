@@ -49,11 +49,13 @@ security:
 #        - { path: ^/arduino/, roles: ROLE_NO_ACCESS }
 
         - { path: ^/arduino/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/gsm/, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/cron/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [127.0.0.1, ::1]}
         - { path: ^/cron/, roles: ROLE_NO_ACCESS }
-        - { path: ^/gsm/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [192.168.2.0/24, 127.0.0.1, ::1]}
-        - { path: ^/gsm/, roles: ROLE_NO_ACCESS }
+
+#        - { path: ^/gsm/, role: IS_AUTHENTICATED_ANONYMOUSLY, ips : [192.168.2.0/24, 127.0.0.1, ::1]}
+#        - { path: ^/gsm/, roles: ROLE_NO_ACCESS }
 
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
