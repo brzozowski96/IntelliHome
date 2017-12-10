@@ -268,7 +268,7 @@ class UpdateAutomationPageController extends Controller
             curl_setopt($ch2, CURLOPT_HEADER, TRUE);
             curl_setopt($ch2, CURLOPT_NOBODY, TRUE); // remove body
             curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
-            $head2 = curl_exec($ch);
+            $head2 = curl_exec($ch2);
             $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
             curl_close($ch2);
             if($httpCode == 200 and $httpCode2 == 200) {
