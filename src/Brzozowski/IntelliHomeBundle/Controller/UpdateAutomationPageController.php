@@ -254,7 +254,7 @@ class UpdateAutomationPageController extends Controller
 
         if( !is_numeric($blindsLevel) or $blindsLevel < 0 or $blindsLevel > 100) {
             $ch = curl_init();
-            $url = 'http://192.168.2.201/setBlind1?params=' . blindsLevel;
+            $url = 'http://192.168.2.201/setBlind1?params=' . $blindsLevel;
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HEADER, TRUE);
             curl_setopt($ch, CURLOPT_NOBODY, TRUE); // remove body
@@ -263,7 +263,7 @@ class UpdateAutomationPageController extends Controller
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
             $ch2 = curl_init();
-            $url2 = 'http://192.168.2.201/setBlind2?params=' . blindsLevel;
+            $url2 = 'http://192.168.2.201/setBlind2?params=' . $blindsLevel;
             curl_setopt($ch2, CURLOPT_URL, $url2);
             curl_setopt($ch2, CURLOPT_HEADER, TRUE);
             curl_setopt($ch2, CURLOPT_NOBODY, TRUE); // remove body
