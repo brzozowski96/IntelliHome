@@ -249,6 +249,35 @@ class UpdateAutomationPageController extends Controller
             return new Response(json_encode($response));
         }
 
+        // temp solution
+        $blindsLevel = $request->request->get('blindsLevel');
+
+        if( !is_numeric($blindsLevel) or $blindsLevel < 0 or $blindsLevel > 100) {
+            $ch = curl_init();
+            $url = 'http://192.168.2.201/setBlind1?params=' . blindsLevel;
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            curl_setopt($ch, CURLOPT_NOBODY, TRUE); // remove body
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $head = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $ch2 = curl_init();
+            $url2 = 'http://192.168.2.201/setBlind2?params=' . blindsLevel;
+            curl_setopt($ch2, CURLOPT_URL, $url2);
+            curl_setopt($ch2, CURLOPT_HEADER, TRUE);
+            curl_setopt($ch2, CURLOPT_NOBODY, TRUE); // remove body
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
+            $head2 = curl_exec($ch);
+            $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+            curl_close($ch2);
+            if($httpCode == 200 and $httpCode2 == 200) {
+                return new Response(json_encode(array("success => true")), Response::HTTP_BAD_REQUEST);
+            }
+
+        }
+        // --------------
+
         return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
     }
 
