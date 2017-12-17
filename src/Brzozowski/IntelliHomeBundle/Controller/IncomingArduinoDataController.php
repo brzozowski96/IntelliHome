@@ -126,7 +126,28 @@ class IncomingArduinoDataController extends Controller
                 $em->flush();
             }
 
-            if($alarmStatus == 'b') return $this->redirectToRoute('send_sms');
+            if($alarmStatus == 'b') {
+                $Repo = $this->getDoctrine()->getRepository('BrzozowskiIntelliHomeBundle:Settings');
+                $settingsRow = $Repo->findOneBy(
+                    array('id' => 1)
+                );
+                $phone = $settingsRow->getAlarmPhoneNumber();
+
+                $sms = new SendSMS($this->getParameter('smsapi_token'));
+                $result = $sms->sendSMS($phone, 'Włamanie na Lawendowej 46!!!');
+
+                if($result) $message = "Wiadomość SMS o włamaniu została wysłana na: ".$phone;
+                else $message = "Wystąpił błąd podczas wysyłania wiadomości SMS (".$sms->getErrorMessage().").";
+
+                $em = $this->getDoctrine()->getManager();
+                $dateTime = new \DateTime();
+
+                // Save log
+                $log = new Logs();
+                $log->setDate($dateTime)->setTime($dateTime)->setContent($message);
+                $em->persist($log);
+                $em->flush();
+            }
 
             return new Response(Response::HTTP_OK);
         }
