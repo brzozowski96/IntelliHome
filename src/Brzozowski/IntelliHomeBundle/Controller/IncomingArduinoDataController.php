@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Brzozowski\IntelliHomeBundle\Entity\Logs;
 use Brzozowski\IntelliHomeBundle\Entity\Alarm;
 use Symfony\Component\HttpFoundation\Response;
+use SMSApi\Client;
+use SMSApi\Api\SmsFactory;
+use SMSApi\Exception\SmsapiException;
 
 /**
  * @Route(
@@ -133,11 +136,36 @@ class IncomingArduinoDataController extends Controller
                 );
                 $phone = $settingsRow->getAlarmPhoneNumber();
 
-                $sms = new SendSMS($this->getParameter('smsapi_token'));
-                $result = $sms->sendSMS($phone, 'Włamanie na Lawendowej 46!!!');
 
-                if($result) $message = "Wiadomość SMS o włamaniu została wysłana na: ".$phone;
-                else $message = "Wystąpił błąd podczas wysyłania wiadomości SMS (".$sms->getErrorMessage().").";
+                //------------
+                $client = Client::createFromToken($this->getParameter('smsapi_token'));
+                
+                $smsapi = new SmsFactory;
+                $smsapi->setClient($client);
+                
+                try {
+                    $actionSend = $smsapi->actionSend();
+                
+                    $actionSend->setTo($phone);
+                    $actionSend->setText('Włamanie na Lawendowej 46!!!');
+                    $actionSend->setSender('ECO');
+                
+                    $response = $actionSend->execute();
+                
+                    $message = "Wiadomość SMS o włamaniu została wysłana na: ".$phone;
+                } catch (SmsapiException $exception) {
+                    $message = "Wystąpił błąd podczas wysyłania wiadomości SMS (".$exception->getMessage().").";
+                }
+                //------------
+
+                //$sms = new SendSMS($this->getParameter('smsapi_token'));
+                //$result = $sms->sendSMS($phone, 'Włamanie na Lawendowej 46!!!');
+
+                //if($result) $message = "Wiadomość SMS o włamaniu została wysłana na: ".$phone;
+                //else $message = "Wystąpił błąd podczas wysyłania wiadomości SMS (".$sms->getErrorMessage().").";
+
+                //------------
+
 
                 $em = $this->getDoctrine()->getManager();
                 $dateTime = new \DateTime();
