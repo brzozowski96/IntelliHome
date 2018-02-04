@@ -345,31 +345,6 @@
                         <button id="setRegulatorDatetime" class="btn btn-default">
                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Ustaw datę i godzinę
                         </button>
-
-                        <br>
-
-                        <button id="openAllBlinds" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz rolety
-                        </button>
-                        <button id="closeAllBlinds" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij rolety
-                        </button>
-
-                        <br>
-
-                        <button id="openFirstBlind" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę w kuchni
-                        </button>
-                        <button id="openSecondBlind" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę w salonie
-                        </button>
-                        <button id="closeFirstBlind" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Zamknij roletę w kuchni
-                        </button>
-                        <button id="closeSecondBlind" class="btn btn-default">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Zamknij roletę w salonie
-                        </button>
-
                     </div>
 
 
@@ -391,5 +366,99 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Rolety
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
+                            <h4>Kuchnia</h4>
+                            <div class="jumbotron container-fluid" style="padding: 10px">
+                                <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
+                                    <select class="form-control" name ="firstBlindSelect[]">
+                                        <option value=" ">Ustaw położenie</option>
+                                        <option value="0">0 %</option>
+                                        <option value="10">10 %</option>
+                                        <option value="20">20 %</option>
+                                        <option value="30">30 %</option>
+                                        <option value="40">40 %</option>
+                                        <option value="50">50 %</option>
+                                        <option value="60">60 %</option>
+                                        <option value="70">70 %</option>
+                                        <option value="80">80 %</option>
+                                        <option value="90">90 %</option>
+                                        <option value="100">100 %</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
+                                    <button id="openFirstBlind" class="btn btn-default" style="width:100%">
+                                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę
+                                    </button>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <button id="closeFirstBlind" class="btn btn-default" style="width:100%">
+                                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij roletę
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
+                            <h4>Jadalnia</h4>
+                            <div class="jumbotron container-fluid" style="padding: 10px">
+                                <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
+                                    <select class="form-control" name ="secondBlindSelect[]">
+                                        <option value=" ">Ustaw położenie</option>
+                                        <option value="0">0 %</option>
+                                        <option value="10">10 %</option>
+                                        <option value="20">20 %</option>
+                                        <option value="30">30 %</option>
+                                        <option value="40">40 %</option>
+                                        <option value="50">50 %</option>
+                                        <option value="60">60 %</option>
+                                        <option value="70">70 %</option>
+                                        <option value="80">80 %</option>
+                                        <option value="90">90 %</option>
+                                        <option value="100">100 %</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
+                                    <button id="openSecondBlind" class="btn btn-default" style="width:100%">
+                                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę
+                                    </button>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <button id="closeSecondBlind" class="btn btn-default" style="width:100%">
+                                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij roletę
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12" style="text-align:justify;border-left:solid 1px #ccc">
+                        <h4>Szybkie sterowanie</h4>
+                        <p><b>Otwórz wszystkie rolety</b></p>
+                            <div class="centerElement">
+                                <button id="openAllBlinds" class="btn btn-default" style="width:100%">
+                                <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Otwórz rolety
+                            </div>
+                        </button>
+                        <br><br>
+                        <p><b>Zamknij wszystkie rolety</b></p>
+                            <div class="centerElement">
+                                <button id="closeAllBlinds" class="btn btn-default" style="width:100%">
+                                <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij rolety
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 {% endblock %}
