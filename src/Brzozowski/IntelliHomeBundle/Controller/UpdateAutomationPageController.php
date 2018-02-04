@@ -281,7 +281,7 @@ class UpdateAutomationPageController extends Controller
         $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
         curl_close($ch2);
         if($httpCode == 200 and $httpCode2 == 200) {
-            return new Response(json_encode(array("success => true")), Response::HTTP_BAD_REQUEST);
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
         }
 
         return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
@@ -314,7 +314,7 @@ class UpdateAutomationPageController extends Controller
         $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
         curl_close($ch2);
         if($httpCode == 200 and $httpCode2 == 200) {
-            return new Response(json_encode(array("success => true")), Response::HTTP_BAD_REQUEST);
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
         }
 
         return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
