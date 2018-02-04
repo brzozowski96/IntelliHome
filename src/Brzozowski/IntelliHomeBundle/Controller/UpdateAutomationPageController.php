@@ -289,6 +289,56 @@ class UpdateAutomationPageController extends Controller
 
     /**
      * @Route(
+     *     "/otworz-rolete-1",
+     *     name="intellihome_automation_set_blind_open_1"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function openFirstBlindSettingsAction(Request $request)
+    {
+        $ch = curl_init();
+        $url = 'http://192.168.2.201/setBlind1?params=0';
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        $head = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($httpCode == 200) {
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/otworz-rolete-2",
+     *     name="intellihome_automation_set_blind_open_2"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function openSecondBlindSettingsAction(Request $request)
+    {
+        $ch2 = curl_init();
+        $url2 = 'http://192.168.2.201/setBlind2?params=0';
+        curl_setopt($ch2, CURLOPT_URL, $url2);
+        curl_setopt($ch2, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
+        $head2 = curl_exec($ch2);
+        $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        curl_close($ch2);
+        if($httpCode2 == 200) {
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
      *     "/zamknij-rolety",
      *     name="intellihome_automation_set_blinds_close"
      * )
@@ -314,6 +364,56 @@ class UpdateAutomationPageController extends Controller
         $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
         curl_close($ch2);
         if($httpCode == 200 and $httpCode2 == 200) {
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/zamknij-rolete-1",
+     *     name="intellihome_automation_set_blind_close_1"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function closeFirstBlindSettingsAction(Request $request)
+    {
+        $ch = curl_init();
+        $url = 'http://192.168.2.201/setBlind1?params=100';
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        $head = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($httpCode == 200) {
+            return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/zamknij-rolete-2",
+     *     name="intellihome_automation_set_blind_close_2"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function closeSecondBlindSettingsAction(Request $request)
+    {
+        $ch2 = curl_init();
+        $url2 = 'http://192.168.2.201/setBlind2?params=100';
+        curl_setopt($ch2, CURLOPT_URL, $url2);
+        curl_setopt($ch2, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
+        $head2 = curl_exec($ch2);
+        $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        curl_close($ch2);
+        if($httpCode2 == 200) {
             return new Response(json_encode(array("success => true")), Response::HTTP_OK);
         }
 

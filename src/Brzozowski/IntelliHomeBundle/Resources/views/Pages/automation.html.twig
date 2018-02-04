@@ -64,9 +64,85 @@
                 });
             });
 
+            $("#openFirstBlind").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blind_open_1') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#openSecondBlind").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blind_open_2') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
             $("#closeAllBlinds").click(function() {
                 $.ajax({
                     url: '{{ path('intellihome_automation_set_blinds_close') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#closeFirstBlind").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blind_close_1') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#closeSecondBlind").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blind_close_2') }}',
                     type: 'POST',
                     dataType: 'json',
                     data: {},
@@ -270,11 +346,28 @@
                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Ustaw datę i godzinę
                         </button>
 
+                        <br>
+
                         <button id="openAllBlinds" class="btn btn-default">
                             <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz rolety
                         </button>
                         <button id="closeAllBlinds" class="btn btn-default">
                             <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij rolety
+                        </button>
+
+                        <br>
+
+                        <button id="openFirstBlind" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę w kuchni
+                        </button>
+                        <button id="openSecondBlind" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz roletę w salonie
+                        </button>
+                        <button id="closeFirstBlind" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Zamknij roletę w kuchni
+                        </button>
+                        <button id="closeSecondBlind" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Zamknij roletę w salonie
                         </button>
 
                     </div>
