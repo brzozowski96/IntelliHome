@@ -256,6 +256,78 @@ class UpdateAutomationPageController extends Controller
 
     /**
      * @Route(
+     *     "/ustaw-rolete-1",
+     *     name="intellihome_automation_set_level_blind_1"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function setFirstBlindLevelSettingsAction(Request $request)
+    {
+        $isAjax = $request->isXmlHttpRequest();
+
+        if($isAjax)
+        {
+            $blindLevel = $request->request->get('blindLevel');
+
+            if( !is_numeric($blindLevel) or $blindLevel < 0 or $blindLevel > 100) {
+                return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+            }
+
+            $ch = curl_init();
+            $url = 'http://192.168.2.201/setBlind1?params=' . $blindLevel;
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $head = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($httpCode == 200) {
+                return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+            }
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/ustaw-rolete-2",
+     *     name="intellihome_automation_set_level_blind_2"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function setSecondBlindLevelSettingsAction(Request $request)
+    {
+        $isAjax = $request->isXmlHttpRequest();
+
+        if($isAjax)
+        {
+            $blindLevel = $request->request->get('blindLevel');
+
+            if( !is_numeric($blindLevel) or $blindLevel < 0 or $blindLevel > 100) {
+                return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+            }
+
+            $ch = curl_init();
+            $url = 'http://192.168.2.201/setBlind2?params=' . $blindLevel;
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $head = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($httpCode == 200) {
+                return new Response(json_encode(array("success => true")), Response::HTTP_OK);
+            }
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
      *     "/otworz-rolety",
      *     name="intellihome_automation_set_blinds_open"
      * )
