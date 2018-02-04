@@ -45,6 +45,44 @@
                 });
             });
 
+            $("#openAllBlinds").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blinds_open') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#closeAllBlinds").click(function() {
+                $.ajax({
+                    url: '{{ path('intellihome_automation_set_blinds_close') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
             $("#setRegulatorDatetime").click(function() {
                 $.ajax({
                     url: '{{ path('intellihome_automation_set_datetime') }}',
@@ -230,6 +268,13 @@
                         </a>
                         <button id="setRegulatorDatetime" class="btn btn-default">
                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Ustaw datę i godzinę
+                        </button>
+
+                        <button id="openAllBlinds" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Owtórz rolety
+                        </button>
+                        <button id="closeAllBlinds" class="btn btn-default">
+                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Zamknij rolety
                         </button>
 
                     </div>
