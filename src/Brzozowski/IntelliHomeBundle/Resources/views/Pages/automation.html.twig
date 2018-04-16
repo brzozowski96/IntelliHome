@@ -201,6 +201,82 @@
                 });
             });
 
+            $.ajax({
+                url: 'http://192.168.2.201/getCurrentPositionBlind1',
+                type: 'POST',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    console.log(d);
+                    $("#currentPositionBlind1").text(d.return_value + '%');
+                },
+                error : function(d){
+                    //console.log(d);
+                    showAjaxError();
+                },
+                complete: function(){
+                    checkSession();
+                }
+            });
+
+            $.ajax({
+                url: 'http://192.168.2.201/getCurrentPositionBlind2',
+                type: 'POST',
+                dataType: 'json',
+                data: {},
+                success: function (d) {
+                    console.log(d);
+                    $("#currentPositionBlind2").text(d.return_value + '%');
+                },
+                error : function(d){
+                    //console.log(d);
+                    showAjaxError();
+                },
+                complete: function(){
+                    checkSession();
+                }
+            });
+
+            $("#currentPositionBlind1").click(function() {
+                $.ajax({
+                    url: 'http://192.168.2.201/getCurrentPositionBlind1',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+                        console.log(d);
+                        $("#currentPositionBlind1").text(d.return_value + '%');
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
+            $("#currentPositionBlind2").click(function() {
+                $.ajax({
+                    url: 'http://192.168.2.201/getCurrentPositionBlind2',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                    success: function (d) {
+                        console.log(d);
+                        $("#currentPositionBlind2").text(d.return_value + '%');
+                    },
+                    error : function(d){
+                        //console.log(d);
+                        showAjaxError();
+                    },
+                    complete: function(){
+                        checkSession();
+                    }
+                });
+            });
+
             $("#setRegulatorDatetime").click(function() {
                 $.ajax({
                     url: '{{ path('intellihome_automation_set_datetime') }}',
@@ -418,7 +494,7 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-12 col-xs-12">
                         <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
-                            <h4>Kuchnia</h4>
+                            <h4>Kuchnia <span id="currentPositionBlind1">()</span></h4>
                             <div class="jumbotron container-fluid" style="padding: 10px">
                                 <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
                                     <select class="form-control" id="firstBlindSelect">
@@ -449,7 +525,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
-                            <h4>Jadalnia</h4>
+                            <h4>Jadalnia <span id="currentPositionBlind2">()</span></h4>
                             <div class="jumbotron container-fluid" style="padding: 10px">
                                 <div class="col-md-4 col-sm-4 col-xs-12" style="padding-bottom:5px">
                                     <select class="form-control" id="secondBlindSelect">
