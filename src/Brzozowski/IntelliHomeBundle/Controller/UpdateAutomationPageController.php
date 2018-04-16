@@ -411,6 +411,62 @@ class UpdateAutomationPageController extends Controller
 
     /**
      * @Route(
+     *     "/pobierz-poziom-rolety-1",
+     *     name="intellihome_automation_get_current_position_1"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function getFirstBlindCurrentPositionAction(Request $request)
+    {
+        $ch = curl_init();
+        $url = 'http://192.168.2.201/getCurrentPositionBlind1';
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        $head = json_decode(curl_exec($ch));
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($httpCode == 200 AND true === isset($head["return_value"])) {
+            return new Response(json_encode(array(
+                "success => true",
+                "position" => $head["return_value"] . "%"
+            )), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
+     *     "/pobierz-poziom-rolety-2",
+     *     name="intellihome_automation_get_current_position_2"
+     * )
+     * @param Request $request
+     * @return Response
+     */
+    public function getSecondBlindCurrentPositionAction(Request $request)
+    {
+        $ch2 = curl_init();
+        $url2 = 'http://192.168.2.201/getCurrentPositionBlind2';
+        curl_setopt($ch2, CURLOPT_URL, $url2);
+        curl_setopt($ch2, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
+        $head2 = json_decode(curl_exec($ch2));
+        $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        curl_close($ch2);
+        if($httpCode2 == 200 AND true === isset($head2["return_value"])) {
+            return new Response(json_encode(array(
+                "success => true",
+                "position" => $head2["return_value"] . "%"
+            )), Response::HTTP_OK);
+        }
+
+        return new Response(json_encode(array("success => false")), Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route(
      *     "/zamknij-rolety",
      *     name="intellihome_automation_set_blinds_close"
      * )

@@ -202,13 +202,13 @@
             });
 
             $.ajax({
-                url: 'http://192.168.2.201/getCurrentPositionBlind1',
+                url: '{{ path('intellihome_automation_get_current_position_1') }}',
                 type: 'POST',
                 dataType: 'json',
                 data: {},
                 success: function (d) {
                     console.log(d);
-                    $("#currentPositionBlind1").text(d.return_value + '%');
+                    $("#currentPositionBlind1").text(d.position);
                 },
                 error : function(d){
                     //console.log(d);
@@ -220,13 +220,13 @@
             });
 
             $.ajax({
-                url: 'http://192.168.2.201/getCurrentPositionBlind2',
+                url: '{{ path('intellihome_automation_get_current_position_2') }}',
                 type: 'POST',
                 dataType: 'json',
                 data: {},
                 success: function (d) {
                     console.log(d);
-                    $("#currentPositionBlind2").text(d.return_value + '%');
+                    $("#currentPositionBlind2").text(d.position);
                 },
                 error : function(d){
                     //console.log(d);
@@ -239,13 +239,13 @@
 
             $("#currentPositionBlind1").click(function() {
                 $.ajax({
-                    url: 'http://192.168.2.201/getCurrentPositionBlind1',
+                    url: '{{ path('intellihome_automation_get_current_position_1') }}',
                     type: 'POST',
                     dataType: 'json',
                     data: {},
                     success: function (d) {
                         console.log(d);
-                        $("#currentPositionBlind1").text(d.return_value + '%');
+                        $("#currentPositionBlind1").text(d.position);
                     },
                     error : function(d){
                         //console.log(d);
@@ -259,13 +259,13 @@
 
             $("#currentPositionBlind2").click(function() {
                 $.ajax({
-                    url: 'http://192.168.2.201/getCurrentPositionBlind2',
+                    url: '{{ path('intellihome_automation_get_current_position_2') }}',
                     type: 'POST',
                     dataType: 'json',
                     data: {},
                     success: function (d) {
                         console.log(d);
-                        $("#currentPositionBlind2").text(d.return_value + '%');
+                        $("#currentPositionBlind2").text(d.position);
                     },
                     error : function(d){
                         //console.log(d);
