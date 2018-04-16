@@ -422,15 +422,15 @@ class UpdateAutomationPageController extends Controller
         $ch = curl_init();
         $url = 'http://192.168.2.201/getCurrentPositionBlind1';
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         $head = json_decode(curl_exec($ch));
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($httpCode == 200 AND true === isset($head["return_value"])) {
+        if($httpCode == 200 AND true === isset($head->return_value)) {
             return new Response(json_encode(array(
                 "success => true",
-                "position" => $head["return_value"] . "%"
+                "position" => $head->return_value . "%"
             )), Response::HTTP_OK);
         }
 
@@ -455,10 +455,10 @@ class UpdateAutomationPageController extends Controller
         $head2 = json_decode(curl_exec($ch2));
         $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
         curl_close($ch2);
-        if($httpCode2 == 200 AND true === isset($head2["return_value"])) {
+        if($httpCode2 == 200 AND true === isset($head2->return_value)) {
             return new Response(json_encode(array(
                 "success => true",
-                "position" => $head2["return_value"] . "%"
+                "position" => $head2->return_value . "%"
             )), Response::HTTP_OK);
         }
 
