@@ -450,7 +450,7 @@ class UpdateAutomationPageController extends Controller
         $ch2 = curl_init();
         $url2 = 'http://192.168.2.201/getCurrentPositionBlind2';
         curl_setopt($ch2, CURLOPT_URL, $url2);
-        curl_setopt($ch2, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch2, CURLOPT_HEADER, FALSE);
         curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
         $head2 = json_decode(curl_exec($ch2));
         $httpCode2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
