@@ -62,6 +62,7 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateFirstBlindCurrentPosition();
                     }
                 });
             });
@@ -83,6 +84,7 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateSecondBlindCurrentPosition();
                     }
                 });
             });
@@ -102,6 +104,8 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateFirstBlindCurrentPosition();
+                        updateSecondBlindCurrentPosition();
                     }
                 });
             });
@@ -121,6 +125,7 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateFirstBlindCurrentPosition();
                     }
                 });
             });
@@ -140,6 +145,7 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateSecondBlindCurrentPosition();
                     }
                 });
             });
@@ -159,6 +165,8 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateFirstBlindCurrentPosition();
+                        updateSSecondBlindCurrentPosition();
                     }
                 });
             });
@@ -178,6 +186,7 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateFirstBlindCurrentPosition();
                     }
                 });
             });
@@ -197,47 +206,13 @@
                     },
                     complete: function(){
                         checkSession();
+                        updateSecondBlindCurrentPosition();
                     }
                 });
             });
 
-            $.ajax({
-                url: '{{ path('intellihome_automation_get_current_position_1') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {},
-                success: function (d) {
-                    console.log(d);
-                    $("#currentPositionBlind1").text('(' + d.position + ')');
-                },
-                error : function(d){
-                    //console.log(d);
-                    showAjaxError();
-                },
-                complete: function(){
-                    checkSession();
-                }
-            });
-
-            $.ajax({
-                url: '{{ path('intellihome_automation_get_current_position_2') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {},
-                success: function (d) {
-                    console.log(d);
-                    $("#currentPositionBlind2").text('(' + d.position + ')');
-                },
-                error : function(d){
-                    //console.log(d);
-                    showAjaxError();
-                },
-                complete: function(){
-                    checkSession();
-                }
-            });
-
-            $("#currentPositionBlind1").click(function() {
+            function updateFirstBlindCurrentPosition()
+            {
                 $.ajax({
                     url: '{{ path('intellihome_automation_get_current_position_1') }}',
                     type: 'POST',
@@ -255,9 +230,10 @@
                         checkSession();
                     }
                 });
-            });
+            }
 
-            $("#currentPositionBlind2").click(function() {
+            function updateSecondBlindCurrentPosition()
+            {
                 $.ajax({
                     url: '{{ path('intellihome_automation_get_current_position_2') }}',
                     type: 'POST',
@@ -275,6 +251,18 @@
                         checkSession();
                     }
                 });
+            }
+
+            updateFirstBlindCurrentPosition();
+            updateSecondBlindCurrentPosition();
+
+
+            $("#currentPositionBlind1").click(function() {
+                updateFirstBlindCurrentPosition();
+            });
+
+            $("#currentPositionBlind2").click(function() {
+                updateSecondBlindCurrentPosition();
             });
 
             $("#setRegulatorDatetime").click(function() {
